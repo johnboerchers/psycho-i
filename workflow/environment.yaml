@@ -1,0 +1,10 @@
+name: fluids
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - mypy
+  - pip
+  - pytest
+  - python
