@@ -12,12 +12,11 @@ import src.input
 
 class SamplePgen:
 
-    def __init__(self, pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray):
+    def __init__(self, pin: src.input.PsychoInput):
 
-        self.pin   = SamplePgen
-        self.pmesh = pmesh
+        self.pin   = pin
 
-    def ProblemGenerator(self):
+    def ProblemGenerator(self, pmesh: src.mesh.PsychoArray):
         """
         This function is called in `main.py` and sets the initial conditions
         specified in the problem input (pin) onto the problem mesh (pmesh).
