@@ -1,0 +1,31 @@
+###################################################################
+#                                                                 #
+#   Contains functions for mesh objects to be used in simulation  #
+#                                                                 #
+###################################################################
+
+import numpy as np
+import abc
+import input
+
+class PsychoArray:
+
+    def __init__(self, pin: input.PsychoInput, dtype: np.dtype):
+
+        self.nvar  = pin.value_dict["nvar"]
+        self.nx1   = pin.value_dict["nx1"]
+        self.nx2   = pin.value_dict["nx2"]
+        self.ng    = pin.value_dict["ng"]
+
+        self.x1min = pin.value_dict["x1min"]
+        self.x1max = pin.value_dict["x1max"]
+        self.x2min = pin.value_dict["x2min"]
+        self.x2max = pin.value_dict["x2max"]
+
+        self.dx1 = (self.x1max - self.x1min) / self.nx1
+        self.dx2 = (self.x2max - self.x2min) / self.nx2
+
+        self.arr = np.zeros((self.nvar, self.nx1 + 2 * self.ng, self.nx2 + 2 * self.ng), dtype=dtype)
+
+    def print_value(self, indvar: int, indx1: int, indx2: int):
+        print(self.arr[indvar, indx1, indx2])
