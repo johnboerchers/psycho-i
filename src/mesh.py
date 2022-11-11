@@ -6,11 +6,13 @@
 
 import numpy as np
 import abc
-import input
+import sys
+sys.path.append("..")
+from src.input import PsychoInput
 
 class PsychoArray:
 
-    def __init__(self, pin: input.PsychoInput, dtype: np.dtype):
+    def __init__(self, pin: PsychoInput, dtype: np.dtype) -> None:
 
         self.nvar  = pin.value_dict["nvar"]
         self.nx1   = pin.value_dict["nx1"]
@@ -27,5 +29,5 @@ class PsychoArray:
 
         self.arr = np.zeros((self.nvar, self.nx1 + 2 * self.ng, self.nx2 + 2 * self.ng), dtype=dtype)
 
-    def print_value(self, indvar: int, indx1: int, indx2: int):
+    def print_value(self, indvar: int, indx1: int, indx2: int) -> None:
         print(self.arr[indvar, indx1, indx2])

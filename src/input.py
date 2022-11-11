@@ -13,7 +13,7 @@ class PsychoInput:
         # Dictionary containing all problem information
         self.value_dict = dict()
 
-    def parse_input_file(self):
+    def parse_input_file(self) -> None:
         """
         Loops through parameter file and stores values from file
         to be used in problem generator
