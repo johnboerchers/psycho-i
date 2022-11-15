@@ -31,3 +31,14 @@ class PsychoArray:
 
     def print_value(self, indvar: int, indx1: int, indx2: int) -> None:
         print(self.arr[indvar, indx1, indx2])
+
+
+
+def get_interm_array(nvar: int, nx1: int, nx2: int, dtype: np.dtype) -> np.ndarray:
+    """
+    Generates empty scratch array for intermediate calculations
+    """
+    if nvar == 1:
+        return np.zeros((nx1, nx2), dtype=dtype)
+    else:
+        return np.zeros((nvar, nx1, nx2), dtype=dtype)
