@@ -27,7 +27,7 @@ class PsychoArray:
         self.dx1 = (self.x1max - self.x1min) / self.nx1
         self.dx2 = (self.x2max - self.x2min) / self.nx2
 
-        self.arr = np.zeros((self.nvar, self.nx1 + 2 * self.ng, self.nx2 + 2 * self.ng), dtype=dtype)
+        self.Un = np.zeros((self.nvar, self.nx1 + 2 * self.ng, self.nx2 + 2 * self.ng), dtype=dtype)
 
     def print_value(self, indvar: int, indx1: int, indx2: int) -> None:
         print(self.arr[indvar, indx1, indx2])

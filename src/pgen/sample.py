@@ -24,9 +24,9 @@ def sampleProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArr
     u0    = pin.value_dict["u0"]
     v0    = pin.value_dict["v0"]
 
-    pmesh.arr[0,:,:] = rho0
-    pmesh.arr[1,:,:] = rho0 * u0
-    pmesh.arr[2,:,:] = rho0 * v0
+    pmesh.Un[0,:,:] = rho0
+    pmesh.Un[1,:,:] = rho0 * u0
+    pmesh.Un[2,:,:] = rho0 * v0
     # pmesh.arr[3,:,:] = rho0 * total energy
 
     return

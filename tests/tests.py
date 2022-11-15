@@ -31,8 +31,8 @@ def test_psycho_pgen():
 
     sampleProblemGenerator(pin=pin, pmesh=pmesh)
 
-    assert np.all(pmesh.arr[0,:,:] == 1.0)
-    assert np.all(pmesh.arr[1,:,:] == 0.0)
-    assert np.all(pmesh.arr[2,:,:] == 0.0)
+    assert np.all(pmesh.Un[0,:,:] == 1.0)
+    assert np.all(pmesh.Un[1,:,:] == 0.0)
+    assert np.all(pmesh.Un[2,:,:] == 0.0)
 
 

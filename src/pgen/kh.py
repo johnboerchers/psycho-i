@@ -39,16 +39,16 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
 
     # Filling array values
     # Densitys
-    pmesh.arr[0,:,:] = rho0
-    pmesh.arr[0,:,np.where(np.abs(y) >= 0.25)] = rho1
+    pmesh.Un[0,:,:] = rho0
+    pmesh.Un[0,:,np.where(np.abs(y) >= 0.25)] = rho1
 
     # Density times x velocity
-    pmesh.arr[1,:,:] = rho0 * u0
-    pmesh.arr[1,:,np.where(np.abs(y) >= 0.25)] = rho1 * u1
+    pmesh.Un[1,:,:] = rho0 * u0
+    pmesh.Un[1,:,np.where(np.abs(y) >= 0.25)] = rho1 * u1
 
     # Density times y velocity
-    pmesh.arr[2,:,:] = rho0 * 0.0
-    pmesh.arr[2,:,np.where(np.abs(y) == 0.25)] = rho1 * v1
+    pmesh.Un[2,:,:] = rho0 * 0.0
+    pmesh.Un[2,:,np.where(np.abs(y) == 0.25)] = rho1 * v1
 
     # Pressures for calculating total energy
     pressures[:,:] = p0
