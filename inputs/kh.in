@@ -1,0 +1,23 @@
+# Input file for the Kelvin-Helmholtz instability (our first instability)
+
+nx1   = 256
+nx2   = 256
+nvar  = 4
+ng    = 2
+
+x1min = -0.5
+x1max = 0.5
+x2min = -0.5
+x2max = 0.5
+
+rho0  = 1.0
+rho1  = 2.0
+
+p0    = 1.0
+p1    = 1.0
+
+u0    = 0.3
+u1    = -0.3
+
+
+
