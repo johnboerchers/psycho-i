@@ -13,6 +13,13 @@ authors = [
   { name = "Sydney Rzepka", email = "sr5286@princeton.edu" },
   { name = "Trevor Fush", email = "sf5201@princeton.edu" },
 ]
+dependencies = [
+  "numpy",
+  "matplotlib",
+  "mypy",
+  "pip",
+  "pre-commit>=2.20.0"
+]
 
 [project.optional-dependencies]
 test = [
