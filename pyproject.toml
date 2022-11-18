@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "psycho-i"
+description = 'Finite volume solver to investigate flow instabilities'
+version = "1.0.1"
+readme = "README.md"
+requires-python = ">=3.7"
+authors = [
+  { name = "John Boerchers", email = "jb5027@princeton.edu" },
+  { name = "Sydney Rzepka", email = "sr5286@princeton.edu" },
+  { name = "Trevor Fush", email = "sf5201@princeton.edu" },
+]
+
+[project.optional-dependencies]
+test = [
+   "pytest>=7.0",
+   "nox>=2022.8.7",
+]
