@@ -1,0 +1,24 @@
+# Sample file showing how parameters in file are laid out
+#
+# Floats need zeros in here, otherwise it will be stored
+# as an int
+
+nx1   = 128
+nx2   = 128
+nvar  = 4
+ng    = 2
+
+x1min = 0.0
+x1max = 1.0
+x2min = 0.0
+x2max = 1.0
+
+rho0  = 1.0
+p0    = 1.0
+u0    = 0.0
+v0    = 0.0
+
+gamma = 1.4
+CFL   = 0.5
+
+
