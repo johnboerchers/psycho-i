@@ -22,6 +22,7 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
@@ -68,6 +69,12 @@ ipython_config.py
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
 
+# Sphinx documentation
+docs/_build/
+
+# pyenv
+.python-version
+
 # Environments
 .env
 .venv
@@ -80,6 +87,8 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
+# mkdocs documentation
+/site
 
 # mypy
 .mypy_cache/

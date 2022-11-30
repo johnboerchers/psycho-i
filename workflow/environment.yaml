@@ -1,10 +1,12 @@
-name: fluids
+name: psycho-i
 channels:
   - conda-forge
 dependencies:
+  - "python>=3.7"
   - numpy
   - matplotlib
   - mypy
   - pip
-  - pytest
-  - python
+  - "pytest>=7.0"
+  - "nox>=7.0"
+  - "pre-commit>=2.20.0"
