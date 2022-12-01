@@ -29,6 +29,64 @@ class PsychoArray:
 
         self.Un = np.zeros((self.nvar, self.nx1 + 2 * self.ng, self.nx2 + 2 * self.ng), dtype=dtype)
 
+    def enforce_bcs(self, pin: PsychoInput) -> None:
+        """
+        NEED TO ADD DOCUMENTATION HERE
+        """
+
+        # Left boundary
+        if pin.value_dict["left_bc"] == "transmissive":
+            self.Un[:,:self.ng,:] = self.Un[:,self.ng:2*self.ng,:]
+
+        elif pin.value_dict["left_bc"] == "periodic":
+            self.Un[:,:self.ng,:] = self.Un[:,-2*self.ng:-self.ng,:]
+
+        elif pin.value_dict["left_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
+
+        # Right boundary
+        if pin.value_dict["right_bc"] == "transmissive":
+            self.Un[:,-self.ng:,:] = self.Un[:,-2*self.ng:-self.ng,:]
+
+        elif pin.value_dict["right_bc"] == "periodic":
+            self.Un[:,-self.ng:,:] = self.Un[:,self.ng:2*self.ng,:]
+
+        elif pin.value_dict["right_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
+
+        # Top boundary 
+        if pin.value_dict["top_bc"] == "transmissive":
+            self.Un[:,:,:self.ng] = self.Un[:,:,self.ng:2*self.ng]
+
+        elif pin.value_dict["top_bc"] == "periodic":
+            self.Un[:,:self.ng] = self.Un[:,-2*self.ng:-self.ng,:]
+
+        elif pin.value_dict["top_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
+
+        # Bottom boundary
+        if pin.value_dict["bottom_bc"] == "transmissive":
+            self.Un[:,:,:self.ng] = self.Un[:,:,self.ng:2*self.ng]
+
+        elif pin.value_dict["bottom_bc"] == "periodic":
+            self.Un[:,:,:self.ng] = self.Un[:,:,-2*self.ng:-self.ng]
+
+        elif pin.value_dict["bottom_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
+
+
     def print_value(self, indvar: int, indx1: int, indx2: int) -> None:
         print(self.arr[indvar, indx1, indx2])
 

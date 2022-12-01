@@ -27,5 +27,11 @@ tmax  = 1.0
 
 gamma = 1.4
 
+# Boundary conditions
+left_bc   = periodic
+right_bc  = periodic
+top_bc    = periodic
+bottom_bc = periodic
+
 
 

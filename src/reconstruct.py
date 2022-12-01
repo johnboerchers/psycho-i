@@ -4,6 +4,8 @@ def get_limited_slopes(U_i_j: np.ndarray, U_ip1_j: np.ndarray, U_im1_j: np.ndarr
                        U_i_jp1: np.ndarray, U_i_jm1: np.ndarray, beta: float):
     """
     NEED TO ADD DOCUMENTATION HERE
+
+    based on page 508 minmod slope limiter in Toro book
     """
     delta_imoh = U_i_j - U_im1_j
     delta_ipoh = U_ip1_j - U_i_j

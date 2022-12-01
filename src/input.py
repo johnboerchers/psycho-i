@@ -34,6 +34,7 @@ class PsychoInput:
                     val = line.split("=")[1].strip()
 
                     # Numbers with `.` are stored as floats, otherwise ints
+                    # NEED TO CHANGE THIS TO HANDLE STRINGS TOO
                     if "." in val:
                         self.value_dict[key] = float(val)
                     else:

@@ -2,6 +2,8 @@ from src.input import PsychoInput
 from src.pgen import kh
 from src.mesh import PsychoArray, get_interm_array
 from src.reconstruct import get_limited_slopes
+from src.tools import get_primitive_variables, calculate_timestep, get_fluxes
+from src.riemann import solve_riemann
 import numpy as np
 import argparse
 
@@ -79,16 +81,54 @@ if __name__ == "__main__":
 
         # Calculate timestep
 
+        dt = calculate_timestep(pmesh, cfl, pin.value_dict["gamma"])
+
+        if (t + dt > tmax):
+            dt = tmax - t
+
         # Enforce BCs
 
+        pmesh.enforce_bcs(pin)
+
         # Data Reconstruction
+
+        # Getting arrays with shifted indices to calculate slopes
+        U_i_j   = pmesh.Un[:,1:-1,1:-1]
+        U_ip1_j = pmesh.Un[:,2:,1:-1]
+        U_im1_j = pmesh.Un[:,:-2,1:-1]
+        U_i_jp1 = pmesh.Un[:,1:-1,2:]
+        U_i_jm1 = pmesh.Un[:,1:-1,:-2]
+
         delta_i, delta_j = get_limited_slopes(U_i_j, U_ip1_j, U_im1_j, U_i_jp1, U_i_jm1, beta=1.0)
 
         # Evolution step
+        # Boundary extrapolated values
+        U_i_L = U_i_j - 1/2 * delta_i
+        U_i_R = U_i_j + 1/2 * delta_i
+        U_j_L = U_i_j - 1/2 * delta_j
+        U_j_R = U_i_j + 1/2 * delta_j
+
+        # Advance by half timestep
+        F_i_L = get_fluxes(U_i_L, "x")
+        F_i_R = get_fluxes(U_i_R, "x")
+        G_j_L = get_fluxes(U_j_L, "y")
+        G_j_R = get_fluxes(U_j_R, "y")
+
+        ...
+
 
         # Riemann Problem
+        # Set up Riemann states
+        ...
+
+        # Do the solve
+        F = solve_riemann(U_l_i_riemann, U_r_i_riemann, "x")
+        G = solve_riemann(U_l_j_riemann, U_r_j_riemann, "y")
 
         # Conservative update
+        Unp1[:,1:-1,1:-1] = pmesh.Un[:,1:-1,1:-1] + ...
+
+        # SAVE DATA HERE??
         
         pass
 
