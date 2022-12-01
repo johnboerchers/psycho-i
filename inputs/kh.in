@@ -1,5 +1,6 @@
 # Input file for the Kelvin-Helmholtz instability (our first instability)
 
+# Grid information
 nx1   = 256
 nx2   = 256
 nvar  = 4
@@ -10,6 +11,7 @@ x1max = 0.5
 x2min = -0.5
 x2max = 0.5
 
+# Parameters for the flow
 rho0  = 1.0
 rho1  = 2.0
 
@@ -19,7 +21,10 @@ p1    = 1.0
 u0    = 0.3
 u1    = -0.3
 
+# Time info
 CFL   = 0.5
+tmax  = 1.0
+
 gamma = 1.4
 
 
