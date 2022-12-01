@@ -4,8 +4,8 @@
 #                                                                 #
 ###################################################################
 
-class PsychoInput:
 
+class PsychoInput:
     def __init__(self, input_fname: str):
 
         self.input_fname = input_fname

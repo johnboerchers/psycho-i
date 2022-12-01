@@ -8,8 +8,8 @@ All of this can be seen on page 504 of the Toro pdf included in this directory
     - Wall (velocities are set for no-slip on walls, density gradient is zero)
 
 2. Data reconstruction
-    - The current state of the variable $U_i^n$ is stored in `pmesh.arr` (I will probably change this to be labeled as `pmesh.Un` instead). 
-    - **Trevor** will implement code to calculate the slopes of the quantities at each of the spaces, denoted as $\Delta_i$ for the x-direction and $\Delta_j$ for the y-direction. 
+    - The current state of the variable $U_i^n$ is stored in `pmesh.arr` (I will probably change this to be labeled as `pmesh.Un` instead).
+    - **Trevor** will implement code to calculate the slopes of the quantities at each of the spaces, denoted as $\Delta_i$ for the x-direction and $\Delta_j$ for the y-direction.
     - Then *boundary extrapolated values* are calculated as follows. This step is just like the interpolation in the finite difference method, except a slope limiter is used to help combat oscillations (**Trevor** is worrying about that part). Stay tuned for Trevor to update this to be in 2D.
 
     $$U_i^L = U_{i,j}^n - \frac{1}{2} \Delta_i, \,\, U_i^R = U_{i,j}^n + \frac{1}{2} \Delta_i$$

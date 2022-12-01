@@ -10,9 +10,10 @@ import argparse
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    "-p", "--problem", 
+    "-p",
+    "--problem",
     help="Problem name as specified in the problem generation file and input file",
-    type=str
+    type=str,
 )
 
 args = parser.parse_args()
@@ -40,41 +41,48 @@ if __name__ == "__main__":
     problem_generator(pin, pmesh)
 
     # Initialize time to start loop
-    t    = 0.0
+    t = 0.0
     tmax = pin.value_dict["tmax"]
-    cfl  = pin.value_dict["CFL"]
+    cfl = pin.value_dict["CFL"]
 
     # Initialize scratch arrays for intermediate calculations
     nx1 = pin.value_dict["nx1"]
     nx2 = pin.value_dict["nx2"]
-    ng  = pin.value_dict["ng"]
+    ng = pin.value_dict["ng"]
 
-    Unp1 = get_interm_array(4, nx1+2*ng, nx2+2*ng, np.float64)
+    Unp1 = get_interm_array(4, nx1 + 2 * ng, nx2 + 2 * ng, np.float64)
 
-    U_i_j  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_ip1_j  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_im1_j  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_i_jp1  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_i_jm1  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
+    U_i_j = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_ip1_j = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_im1_j = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_i_jp1 = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_i_jm1 = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
 
-    U_i_L  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_i_R  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
+    U_i_L = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_i_R = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
 
-    U_j_L  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_j_R  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
+    U_j_L = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_j_R = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
 
-    U_i_L_bar  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_i_R_bar  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
+    U_i_L_bar = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_i_R_bar = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
 
-    U_j_L_bar  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
-    U_j_R_bar  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-2), np.float64)
+    U_j_L_bar = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
+    U_j_R_bar = get_interm_array(4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 2), np.float64)
 
-    U_l_i_riemann = get_interm_array(4, nx1+(2*ng-3), nx2+(2*ng-2), np.float64)
-    U_r_i_riemann = get_interm_array(4, nx1+(2*ng-3), nx2+(2*ng-2), np.float64)
+    U_l_i_riemann = get_interm_array(
+        4, nx1 + (2 * ng - 3), nx2 + (2 * ng - 2), np.float64
+    )
+    U_r_i_riemann = get_interm_array(
+        4, nx1 + (2 * ng - 3), nx2 + (2 * ng - 2), np.float64
+    )
 
-    U_l_j_riemann  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-3), np.float64)
-    U_r_j_riemann  = get_interm_array(4, nx1+(2*ng-2), nx2+(2*ng-3), np.float64)
-
+    U_l_j_riemann = get_interm_array(
+        4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 3), np.float64
+    )
+    U_r_j_riemann = get_interm_array(
+        4, nx1 + (2 * ng - 2), nx2 + (2 * ng - 3), np.float64
+    )
 
     # Main simulation loop for MUSCL-Hancock Scheme
     while t < tmax:
@@ -83,7 +91,7 @@ if __name__ == "__main__":
 
         dt = calculate_timestep(pmesh, cfl, pin.value_dict["gamma"])
 
-        if (t + dt > tmax):
+        if t + dt > tmax:
             dt = tmax - t
 
         # Enforce BCs
@@ -93,20 +101,22 @@ if __name__ == "__main__":
         # Data Reconstruction
 
         # Getting arrays with shifted indices to calculate slopes
-        U_i_j   = pmesh.Un[:,1:-1,1:-1]
-        U_ip1_j = pmesh.Un[:,2:,1:-1]
-        U_im1_j = pmesh.Un[:,:-2,1:-1]
-        U_i_jp1 = pmesh.Un[:,1:-1,2:]
-        U_i_jm1 = pmesh.Un[:,1:-1,:-2]
+        U_i_j = pmesh.Un[:, 1:-1, 1:-1]
+        U_ip1_j = pmesh.Un[:, 2:, 1:-1]
+        U_im1_j = pmesh.Un[:, :-2, 1:-1]
+        U_i_jp1 = pmesh.Un[:, 1:-1, 2:]
+        U_i_jm1 = pmesh.Un[:, 1:-1, :-2]
 
-        delta_i, delta_j = get_limited_slopes(U_i_j, U_ip1_j, U_im1_j, U_i_jp1, U_i_jm1, beta=1.0)
+        delta_i, delta_j = get_limited_slopes(
+            U_i_j, U_ip1_j, U_im1_j, U_i_jp1, U_i_jm1, beta=1.0
+        )
 
         # Evolution step
         # Boundary extrapolated values
-        U_i_L = U_i_j - 1/2 * delta_i
-        U_i_R = U_i_j + 1/2 * delta_i
-        U_j_L = U_i_j - 1/2 * delta_j
-        U_j_R = U_i_j + 1/2 * delta_j
+        U_i_L = U_i_j - 1 / 2 * delta_i
+        U_i_R = U_i_j + 1 / 2 * delta_i
+        U_j_L = U_i_j - 1 / 2 * delta_j
+        U_j_R = U_i_j + 1 / 2 * delta_j
 
         # Advance by half timestep
         F_i_L = get_fluxes(U_i_L, "x")
@@ -115,7 +125,6 @@ if __name__ == "__main__":
         G_j_R = get_fluxes(U_j_R, "y")
 
         ...
-
 
         # Riemann Problem
         # Set up Riemann states
@@ -126,9 +135,6 @@ if __name__ == "__main__":
         G = solve_riemann(U_l_j_riemann, U_r_j_riemann, "y")
 
         # Conservative update
-        Unp1[:,1:-1,1:-1] = pmesh.Un[:,1:-1,1:-1] + ...
+        Unp1[:, 1:-1, 1:-1] = pmesh.Un[:, 1:-1, 1:-1] + ...
 
         # SAVE DATA HERE??
-        
-        pass
-

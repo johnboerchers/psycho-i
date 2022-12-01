@@ -3,21 +3,22 @@ import sys
 from mesh import PsychoArray
 from eos import e_EOS, p_EOS
 
+
 def get_primitive_variables(Un: np.ndarray, gamma: float):
     """
     NEED TO ADD DOCUMENTATION
     """
 
     if len(Un.shape) > 1:
-        rho = np.zeros_like(Un[0,:,:])
-        u   = np.zeros_like(Un[0,:,:])
-        v   = np.zeros_like(Un[0,:,:])
-        p   = np.zeros_like(Un[0,:,:])
+        rho = np.zeros_like(Un[0, :, :])
+        u = np.zeros_like(Un[0, :, :])
+        v = np.zeros_like(Un[0, :, :])
+        p = np.zeros_like(Un[0, :, :])
 
-        rho[:,:] = Un[0,:,:]
-        u[:,:]   = Un[1,:,:] / rho
-        v[:,:]   = Un[2,:,:] / rho
-        e   = Un[4,:,:] - 1/2 * ( u * u + v * v )
+        rho[:, :] = Un[0, :, :]
+        u[:, :] = Un[1, :, :] / rho
+        v[:, :] = Un[2, :, :] / rho
+        e = Un[4, :, :] - 1 / 2 * (u * u + v * v)
 
         p = p_EOS(rho, e, gamma)
 
@@ -26,9 +27,9 @@ def get_primitive_variables(Un: np.ndarray, gamma: float):
     else:
 
         rho = Un[0]
-        u   = Un[1] / rho
-        v   = Un[2] / rho
-        e   = Un[4] - 1/2 * ( u * u + v * v )
+        u = Un[1] / rho
+        v = Un[2] / rho
+        e = Un[4] - 1 / 2 * (u * u + v * v)
 
         p = p_EOS(rho, e, gamma)
 
