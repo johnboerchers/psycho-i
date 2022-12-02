@@ -37,5 +37,7 @@ class PsychoInput:
                     # NEED TO CHANGE THIS TO HANDLE STRINGS TOO
                     if "." in val:
                         self.value_dict[key] = float(val)
+                    elif key == "left_bc" or key == "right_bc" or key == "top_bc" or key == "bottom_bc":
+                        self.value_dict[key] = str(val)
                     else:
                         self.value_dict[key] = int(val)

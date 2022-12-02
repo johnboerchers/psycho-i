@@ -21,6 +21,8 @@ p1    = 1.0
 u0    = 0.3
 u1    = -0.3
 
+pert_amp = 0.01
+
 # Time info
 CFL   = 0.5
 tmax  = 1.0

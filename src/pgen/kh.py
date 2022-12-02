@@ -6,7 +6,7 @@ sys.path.append("../..")
 
 import src.mesh
 import src.input
-import src.eos
+from src.eos import e_EOS, p_EOS
 import numpy as np
 
 
@@ -27,7 +27,7 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
     )
 
     # make empty pressure array for storage
-    pressures = np.zeros_like(pmesh.arr[0, :, :])
+    pressures = np.zeros_like(pmesh.Un[0, :, :])
 
     rho0 = pin.value_dict["rho0"]
     rho1 = pin.value_dict["rho1"]
@@ -39,7 +39,7 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
     u1 = pin.value_dict["u1"]
 
     # Y velocity needs to be tripped by random velocity perturbations to start instability
-    v1 = pin.value_dict["pert_amp"] * np.random.random(size=pmesh.arr[0, :, 0].size)
+    v1 = pin.value_dict["pert_amp"] * np.random.random(size=pmesh.Un[0, :, 0].size)
 
     # Filling array values
     # Densitys
@@ -59,5 +59,8 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
     pressures[:, np.where(np.abs(y) >= 0.25)] = p1
 
     # need to fill total energy
+    pmesh.Un[3,:,:] = 0.5 * (pmesh.Un[0,:,:])*(pmesh.Un[1,:,:]/pmesh.Un[0,:,:]) **2 + \
+                      0.5 * (pmesh.Un[0,:,:])*(pmesh.Un[1,:,:]/pmesh.Un[0,:,:]) **2 + \
+                          (pmesh.Un[0,:,:])*e_EOS(pmesh.Un[0,:,:], pressures, pin.value_dict["gamma"])
 
     return

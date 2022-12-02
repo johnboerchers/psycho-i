@@ -1,24 +1,22 @@
 import numpy as np
 import sys
-from mesh import PsychoArray
-from eos import e_EOS, p_EOS
+sys.path.append("..")
+from src.mesh import PsychoArray
+from src.eos import e_EOS, p_EOS
+from numba import njit
 
-
+@njit()
 def get_primitive_variables(Un: np.ndarray, gamma: float):
     """
     NEED TO ADD DOCUMENTATION
     """
 
     if len(Un.shape) > 1:
-        rho = np.zeros_like(Un[0, :, :])
-        u = np.zeros_like(Un[0, :, :])
-        v = np.zeros_like(Un[0, :, :])
-        p = np.zeros_like(Un[0, :, :])
 
-        rho[:, :] = Un[0, :, :]
-        u[:, :] = Un[1, :, :] / rho
-        v[:, :] = Un[2, :, :] / rho
-        e = Un[4, :, :] - 1 / 2 * (u * u + v * v)
+        rho = Un[0, :, :]
+        u = Un[1, :, :] / rho
+        v = Un[2, :, :] / rho
+        e = Un[3, :, :] - 1 / 2 * (u * u + v * v)
 
         p = p_EOS(rho, e, gamma)
 
@@ -29,31 +27,65 @@ def get_primitive_variables(Un: np.ndarray, gamma: float):
         rho = Un[0]
         u = Un[1] / rho
         v = Un[2] / rho
-        e = Un[4] - 1 / 2 * (u * u + v * v)
+        e = Un[3] - 1 / 2 * (u * u + v * v)
 
         p = p_EOS(rho, e, gamma)
 
         return rho, u, v, p
 
-
-def get_fluxes(Un: np.ndarray, direction: str) -> np.ndarray:
+@njit()
+def get_fluxes(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
     """
     Returns fluxes for input array... need to be more descriptive but
     this is what's on the right side of the board
     """
 
-    return
+    F = np.zeros_like(Un)
+    rho, u, v, p = get_primitive_variables(Un,gamma)
+
+    if len(Un.shape) > 1:
+        if direction == "x":
+
+            F[0,:,:] = rho*u
+            F[1,:,:] = rho*u**2 + p
+            F[2,:,:] = rho*u*v
+            F[3,:,:] = u*(Un[3,:,:] + p)
+
+        elif direction == "y":
+
+            F[0,:,:] = rho*v
+            F[1,:,:] = rho*u*v
+            F[2,:,:] = rho*v*v + p
+            F[3,:,:] = v*(Un[3,:,:] + p)
+
+    else:
+        if direction == "x":
+
+            F[0] = rho*u
+            F[1] = rho*u**2 + p
+            F[2] = rho*u*v
+            F[3] = u*(Un[3,:,:] + p)
+
+        elif direction == "y":
+
+            F[0] = rho*v
+            F[1] = rho*u*v
+            F[2] = rho*v*v + p
+            F[3] = v*(Un[3,:,:] + p)
+
+    return F
 
 
 def calculate_timestep(pmesh: PsychoArray, cfl: float, gamma: float) -> float:
     """
     NEED TO ADD DOCUMENTATION
     """
-
+    print(type(cfl), type(gamma))
     rho, u, v, p = get_primitive_variables(pmesh.Un, gamma)
 
     a = np.sqrt(gamma * p / rho)
+    print(np.abs(u) + a)
 
-    max_vel = np.amax(np.abs(u) + a, np.abs(v) + a)
+    max_vel = max(np.amax(np.abs(u) + a), np.amax(np.abs(v) + a))
 
     return cfl * pmesh.dx1 / max_vel

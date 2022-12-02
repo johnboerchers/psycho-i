@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     problem_name = args.problem
 
-    input_fname = f"inputs/{problem_name}"
+    input_fname = f"inputs/{problem_name}.in"
 
     # Load input file parameters to be used in simulation setup
     pin = PsychoInput(input_fname=input_fname)
@@ -42,8 +42,10 @@ if __name__ == "__main__":
 
     # Initialize time to start loop
     t = 0.0
-    tmax = pin.value_dict["tmax"]
-    cfl = pin.value_dict["CFL"]
+    tmax = float(pin.value_dict["tmax"])
+    cfl = float(pin.value_dict["CFL"])
+    gamma = float(pin.value_dict["gamma"])
+    print_freq = 100
 
     # Initialize scratch arrays for intermediate calculations
     nx1 = pin.value_dict["nx1"]
@@ -85,11 +87,13 @@ if __name__ == "__main__":
     )
 
     # Main simulation loop for MUSCL-Hancock Scheme
+    iter = 0
+    print(f"Iteration   |   Time   |   Timestep")
     while t < tmax:
 
         # Calculate timestep
 
-        dt = calculate_timestep(pmesh, cfl, pin.value_dict["gamma"])
+        dt = calculate_timestep(pmesh, cfl, gamma)
 
         if t + dt > tmax:
             dt = tmax - t
@@ -119,22 +123,37 @@ if __name__ == "__main__":
         U_j_R = U_i_j + 1 / 2 * delta_j
 
         # Advance by half timestep
-        F_i_L = get_fluxes(U_i_L, "x")
-        F_i_R = get_fluxes(U_i_R, "x")
-        G_j_L = get_fluxes(U_j_L, "y")
-        G_j_R = get_fluxes(U_j_R, "y")
+        F_i_L = get_fluxes(U_i_L, gamma, "x")
+        F_i_R = get_fluxes(U_i_R, gamma, "x")
+        G_j_L = get_fluxes(U_j_L, gamma, "y")
+        G_j_R = get_fluxes(U_j_R, gamma, "y")
 
-        ...
+        flux_x = 1/2 * dt / pmesh.dx1 * (F_i_L - F_i_R)
+        flux_y = 1/2 * dt / pmesh.dx2 * (G_j_L - G_j_R)
+
+        U_i_L += flux_x
+        U_i_R += flux_x
+        U_j_L += flux_y
+        U_j_R += flux_y
 
         # Riemann Problem
         # Set up Riemann states
-        ...
+        U_l_i_riemann = U_i_R[:,:-1,:]
+        U_r_i_riemann = U_i_L[:,1:,:]
+        U_l_j_riemann = U_j_R[:,:,:-1]
+        U_r_j_riemann = U_j_L[:,:,1:]
 
         # Do the solve
-        F = solve_riemann(U_l_i_riemann, U_r_i_riemann, "x")
-        G = solve_riemann(U_l_j_riemann, U_r_j_riemann, "y")
+        F = solve_riemann(U_l_i_riemann, U_r_i_riemann, gamma, "x")
+        G = solve_riemann(U_l_j_riemann, U_r_j_riemann, gamma, "y")
 
         # Conservative update
-        Unp1[:, 1:-1, 1:-1] = pmesh.Un[:, 1:-1, 1:-1] + ...
+        pmesh.Un[:, 2:-2, 2:-2] += dt / pmesh.dx1 * (F[:,:-1,1:-1] - F[:,1:,1:-1]) + dt / pmesh.dx2 * (G[:,1:-1,:-1] - G[:,1:-1,1:])
 
         # SAVE DATA HERE??
+
+        if iter % print_freq == 0:
+            print(f"{iter}       {t}       {dt}")
+
+        t += dt
+        iter += 1
