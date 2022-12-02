@@ -2,7 +2,7 @@ from src.input import PsychoInput
 from src.pgen import kh
 from src.mesh import PsychoArray, get_interm_array
 from src.reconstruct import get_limited_slopes
-from src.tools import get_primitive_variables, calculate_timestep, get_fluxes
+from src.tools import calculate_timestep, get_fluxes_1d, get_fluxes_2d
 from src.riemann import solve_riemann
 import numpy as np
 import argparse
@@ -123,13 +123,13 @@ if __name__ == "__main__":
         U_j_R = U_i_j + 1 / 2 * delta_j
 
         # Advance by half timestep
-        F_i_L = get_fluxes(U_i_L, gamma, "x")
-        F_i_R = get_fluxes(U_i_R, gamma, "x")
-        G_j_L = get_fluxes(U_j_L, gamma, "y")
-        G_j_R = get_fluxes(U_j_R, gamma, "y")
+        F_i_L = get_fluxes_2d(U_i_L, gamma, "x")
+        F_i_R = get_fluxes_2d(U_i_R, gamma, "x")
+        G_j_L = get_fluxes_2d(U_j_L, gamma, "y")
+        G_j_R = get_fluxes_2d(U_j_R, gamma, "y")
 
-        flux_x = 1/2 * dt / pmesh.dx1 * (F_i_L - F_i_R)
-        flux_y = 1/2 * dt / pmesh.dx2 * (G_j_L - G_j_R)
+        flux_x = 1 / 2 * dt / pmesh.dx1 * (F_i_L - F_i_R)
+        flux_y = 1 / 2 * dt / pmesh.dx2 * (G_j_L - G_j_R)
 
         U_i_L += flux_x
         U_i_R += flux_x
@@ -138,17 +138,19 @@ if __name__ == "__main__":
 
         # Riemann Problem
         # Set up Riemann states
-        U_l_i_riemann = U_i_R[:,:-1,:]
-        U_r_i_riemann = U_i_L[:,1:,:]
-        U_l_j_riemann = U_j_R[:,:,:-1]
-        U_r_j_riemann = U_j_L[:,:,1:]
+        U_l_i_riemann = U_i_R[:, :-1, :]
+        U_r_i_riemann = U_i_L[:, 1:, :]
+        U_l_j_riemann = U_j_R[:, :, :-1]
+        U_r_j_riemann = U_j_L[:, :, 1:]
 
         # Do the solve
         F = solve_riemann(U_l_i_riemann, U_r_i_riemann, gamma, "x")
         G = solve_riemann(U_l_j_riemann, U_r_j_riemann, gamma, "y")
 
         # Conservative update
-        pmesh.Un[:, 2:-2, 2:-2] += dt / pmesh.dx1 * (F[:,:-1,1:-1] - F[:,1:,1:-1]) + dt / pmesh.dx2 * (G[:,1:-1,:-1] - G[:,1:-1,1:])
+        pmesh.Un[:, 2:-2, 2:-2] += dt / pmesh.dx1 * (
+            F[:, :-1, 1:-1] - F[:, 1:, 1:-1]
+        ) + dt / pmesh.dx2 * (G[:, 1:-1, :-1] - G[:, 1:-1, 1:])
 
         # SAVE DATA HERE??
 
