@@ -38,4 +38,3 @@ def test_psycho_pgen():
     assert np.all(pmesh.Un[2, :, :] == 0.0)
 
 
-
