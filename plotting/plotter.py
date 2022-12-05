@@ -11,7 +11,6 @@ class Plotter:
         # Get and store the data and info
         self.datafiles = datafiles
         self.grid_info = grid_info
-        print(self.datafiles.keys())
 
         # Extract information needed for plotting
         self.dx = grid_info["dx"]
@@ -44,9 +43,3 @@ class Plotter:
             fig.colorbar(cf, label=f"{args[count]}")
 
         plt.show()
-
-
-if __name__ == "__main__":
-    grid_sizing = {"dx": 0.2, "dy": 0.2, "Nx": 5, "Ny": 5}
-    plotter = Plotter({"u": "sample_u.txt", "v": "sample_v.txt"}, grid_sizing)
-    plotter.create_plot("u", "v")
