@@ -34,7 +34,6 @@ class Plotter:
         # Get and store the data and info
         self.datafiles = datafiles
         self.grid_info = grid_info
-        print(self.datafiles.keys())
 
         # Extract information needed for plotting
 <<<<<<< HEAD
@@ -105,6 +104,7 @@ class Plotter:
 >>>>>>> 9d988f1 (Formatting changes)
 
         plt.show()
+<<<<<<< HEAD
 
 
 <<<<<<< HEAD
@@ -119,3 +119,5 @@ if __name__ == "__main__":
     plotter = Plotter({"u": "sample_u.txt", "v": "sample_v.txt"}, grid_sizing)
     plotter.create_plot("u", "v")
 >>>>>>> 9d988f1 (Formatting changes)
+=======
+>>>>>>> eabdb02 (Delete debugging/print statements)
