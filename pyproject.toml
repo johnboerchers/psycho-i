@@ -26,3 +26,8 @@ test = [
    "pytest>=7.0",
    "nox>=2022.8.7",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
