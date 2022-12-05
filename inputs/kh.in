@@ -22,5 +22,12 @@ u1    = -0.3
 CFL   = 0.5
 gamma = 1.4
 
+# Desired variables to output inputted as list, options include: x-velocity, y-velocity, density, pressure, total-energy
+output_variables = ["x-velocity", "y-velocity"]
 
+# Desired output frequency inputted as a float
+output_frequency = 0.01
+# note that if frequency is more frequent than timestep, then output will just be after timestep...this will need to be added in main.py
 
+# Desired data file type inputted as a string, options include: txt, csv, pickle, hdf5, numpy.save
+data_file_type = ["txt"]
