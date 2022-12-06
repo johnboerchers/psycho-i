@@ -21,11 +21,11 @@ p1    = 1.0
 u0    = 0.3
 u1    = -0.3
 
-pert_amp = 0.01
+pert_amp = 0.1
 
 # Time info
-CFL   = 0.5
-tmax  = 1.0
+CFL   = 0.3
+tmax  = 5.0
 
 gamma = 1.4
 

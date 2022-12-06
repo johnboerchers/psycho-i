@@ -133,10 +133,10 @@ def solve_riemann(
                 )
 
             # This is from Toro
-            # S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
+            S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
 
             # Simpler assumption
-            S_c = ustar
+            # S_c = ustar
 
             if S_r <= 0.0:
                 # R region

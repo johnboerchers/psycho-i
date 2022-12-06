@@ -9,6 +9,8 @@ import src.input
 from src.eos import e_EOS, p_EOS
 import numpy as np
 
+import matplotlib.pyplot as plt
+
 
 def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) -> None:
     """
@@ -20,10 +22,10 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
 
     # Get x values and y values
     x = np.linspace(
-        pin.value_dict["x1min"], pin.value_dict["x1max"], pin.value_dict["nx1"]
+        pin.value_dict["x1min"], pin.value_dict["x1max"], pin.value_dict["nx1"] + 2 * pin.value_dict["ng"]
     )
     y = np.linspace(
-        pin.value_dict["x2min"], pin.value_dict["x2max"], pin.value_dict["nx2"]
+        pin.value_dict["x2min"], pin.value_dict["x2max"], pin.value_dict["nx2"] + 2 * pin.value_dict["ng"]
     )
 
     # make empty pressure array for storage
@@ -40,28 +42,34 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
 
     # Y velocity needs to be tripped by random velocity perturbations to start instability
     v1 = pin.value_dict["pert_amp"] * np.random.random(size=pmesh.Un[0, :, 0].size)
+    # print(f"V1 : {v1}")
 
     # Filling array values
     # Densitys
     pmesh.Un[0, :, :] = rho0
-    pmesh.Un[0, :, np.where(np.abs(y) >= 0.25)] = rho1
+    pmesh.Un[0, :, np.abs(y) >= 0.25] = rho1
 
     # Density times x velocity
     pmesh.Un[1, :, :] = rho0 * u0
-    pmesh.Un[1, :, np.where(np.abs(y) >= 0.25)] = rho1 * u1
+    pmesh.Un[1, :, np.abs(y) >= 0.25] = rho1 * u1
 
     # Density times y velocity
     pmesh.Un[2, :, :] = rho0 * 0.0
-    pmesh.Un[2, :, np.where(np.abs(y) == 0.25)] = rho1 * v1
+    pmesh.Un[2, :, int(pin.value_dict["nx2"] * 0.25)] = rho1 * v1
+    pmesh.Un[2, :, int(pin.value_dict["nx2"] * -0.25)] = rho1 * v1
+
+    fig = plt.figure(figsize=(8,8))
+    plt.imshow(np.rot90(pmesh.Un[2,:,:]/pmesh.Un[0,:,:]))
+    plt.savefig("init.png")
+    plt.close()
 
     # Pressures for calculating total energy
     pressures[:, :] = p0
-    pressures[:, np.where(np.abs(y) >= 0.25)] = p1
 
     # need to fill total energy
     pmesh.Un[3, :, :] = (
         0.5 * (pmesh.Un[0, :, :]) * (pmesh.Un[1, :, :] / pmesh.Un[0, :, :]) ** 2
-        + 0.5 * (pmesh.Un[0, :, :]) * (pmesh.Un[1, :, :] / pmesh.Un[0, :, :]) ** 2
+        + 0.5 * (pmesh.Un[0, :, :]) * (pmesh.Un[2, :, :] / pmesh.Un[0, :, :]) ** 2
         + (pmesh.Un[0, :, :])
         * e_EOS(pmesh.Un[0, :, :], pressures, pin.value_dict["gamma"])
     )

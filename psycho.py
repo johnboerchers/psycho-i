@@ -1,11 +1,12 @@
 from src.input import PsychoInput
 from src.pgen import kh
 from src.mesh import PsychoArray, get_interm_array
-from src.reconstruct import get_limited_slopes
+from src.reconstruct import get_limited_slopes, get_unlimited_slopes
 from src.tools import calculate_timestep, get_fluxes_1d, get_fluxes_2d
 from src.riemann import solve_riemann
 import numpy as np
 import argparse
+import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     tmax = float(pin.value_dict["tmax"])
     cfl = float(pin.value_dict["CFL"])
     gamma = float(pin.value_dict["gamma"])
-    print_freq = 100
+    print_freq = 50
 
     # Initialize scratch arrays for intermediate calculations
     nx1 = pin.value_dict["nx1"]
@@ -128,13 +129,12 @@ if __name__ == "__main__":
         G_j_L = get_fluxes_2d(U_j_L, gamma, "y")
         G_j_R = get_fluxes_2d(U_j_R, gamma, "y")
 
-        flux_x = 1 / 2 * dt / pmesh.dx1 * (F_i_L - F_i_R)
-        flux_y = 1 / 2 * dt / pmesh.dx2 * (G_j_L - G_j_R)
+        int_flux = 1 / 2 * dt / pmesh.dx1 * (F_i_L - F_i_R) + 1 / 2 * dt / pmesh.dx2 * (G_j_L - G_j_R)
 
-        U_i_L += flux_x
-        U_i_R += flux_x
-        U_j_L += flux_y
-        U_j_R += flux_y
+        U_i_L += int_flux
+        U_i_R += int_flux
+        U_j_L += int_flux
+        U_j_R += int_flux
 
         # Riemann Problem
         # Set up Riemann states
@@ -155,6 +155,17 @@ if __name__ == "__main__":
         # SAVE DATA HERE??
 
         if iter % print_freq == 0:
+            #######################################
+            # Temporary plotting for debugging, 
+            # can be removed when not needed
+            #######################################
+            striter = str(iter).zfill(4)
+            fig = plt.figure(figsize=(8,8))
+            plt.imshow(np.rot90(pmesh.Un[0,:,:]))
+            plt.colorbar()
+            plt.savefig(f"test.{striter}.png")
+            plt.close()
+            #######################################
             print(f"{iter}       {t}       {dt}")
 
         t += dt
