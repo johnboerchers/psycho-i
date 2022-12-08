@@ -1,10 +1,11 @@
 import pytest
 import sys
 import numpy as np
+
 sys.path.append("..")
 
 from src.input import PsychoInput
-from src.mesh  import PsychoArray
+from src.mesh import PsychoArray
 from src.pgen.sample import sampleProblemGenerator
 
 
@@ -21,6 +22,7 @@ def test_psycho_input():
     assert pin.value_dict["u0"] == 0.0
     assert pin.value_dict["v0"] == 0.0
 
+
 def test_psycho_pgen():
 
     pin = PsychoInput(f"inputs/sample.in")
@@ -31,8 +33,9 @@ def test_psycho_pgen():
 
     sampleProblemGenerator(pin=pin, pmesh=pmesh)
 
-    assert np.all(pmesh.Un[0,:,:] == 1.0)
-    assert np.all(pmesh.Un[1,:,:] == 0.0)
-    assert np.all(pmesh.Un[2,:,:] == 0.0)
+    assert np.all(pmesh.Un[0, :, :] == 1.0)
+    assert np.all(pmesh.Un[1, :, :] == 0.0)
+    assert np.all(pmesh.Un[2, :, :] == 0.0)
+
 
 

@@ -4,8 +4,8 @@
 #                                                                 #
 ###################################################################
 
-class PsychoInput:
 
+class PsychoInput:
     def __init__(self, input_fname: str):
 
         self.input_fname = input_fname
@@ -34,7 +34,15 @@ class PsychoInput:
                     val = line.split("=")[1].strip()
 
                     # Numbers with `.` are stored as floats, otherwise ints
+                    # NEED TO CHANGE THIS TO HANDLE STRINGS TOO
                     if "." in val:
                         self.value_dict[key] = float(val)
+                    elif (
+                        key == "left_bc"
+                        or key == "right_bc"
+                        or key == "top_bc"
+                        or key == "bottom_bc"
+                    ):
+                        self.value_dict[key] = str(val)
                     else:
                         self.value_dict[key] = int(val)

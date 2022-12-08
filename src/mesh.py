@@ -7,17 +7,18 @@
 import numpy as np
 import abc
 import sys
+
 sys.path.append("..")
 from src.input import PsychoInput
 
-class PsychoArray:
 
+class PsychoArray:
     def __init__(self, pin: PsychoInput, dtype: np.dtype) -> None:
 
-        self.nvar  = pin.value_dict["nvar"]
-        self.nx1   = pin.value_dict["nx1"]
-        self.nx2   = pin.value_dict["nx2"]
-        self.ng    = pin.value_dict["ng"]
+        self.nvar = pin.value_dict["nvar"]
+        self.nx1 = pin.value_dict["nx1"]
+        self.nx2 = pin.value_dict["nx2"]
+        self.ng = pin.value_dict["ng"]
 
         self.x1min = pin.value_dict["x1min"]
         self.x1max = pin.value_dict["x1max"]
@@ -27,11 +28,69 @@ class PsychoArray:
         self.dx1 = (self.x1max - self.x1min) / self.nx1
         self.dx2 = (self.x2max - self.x2min) / self.nx2
 
-        self.Un = np.zeros((self.nvar, self.nx1 + 2 * self.ng, self.nx2 + 2 * self.ng), dtype=dtype)
+        self.Un = np.zeros(
+            (self.nvar, self.nx1 + 2 * self.ng, self.nx2 + 2 * self.ng), dtype=dtype
+        )
+
+    def enforce_bcs(self, pin: PsychoInput) -> None:
+        """
+        NEED TO ADD DOCUMENTATION HERE
+        """
+
+        # Left boundary
+        if pin.value_dict["left_bc"] == "transmissive":
+            self.Un[:, : self.ng, :] = self.Un[:, self.ng : 2 * self.ng, :]
+
+        elif pin.value_dict["left_bc"] == "periodic":
+            self.Un[:, : self.ng, :] = self.Un[:, -2 * self.ng : -self.ng, :]
+
+        elif pin.value_dict["left_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
+
+        # Right boundary
+        if pin.value_dict["right_bc"] == "transmissive":
+            self.Un[:, -self.ng :, :] = self.Un[:, -2 * self.ng : -self.ng, :]
+
+        elif pin.value_dict["right_bc"] == "periodic":
+            self.Un[:, -self.ng :, :] = self.Un[:, self.ng : 2 * self.ng, :]
+
+        elif pin.value_dict["right_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
+
+        # Top boundary
+        if pin.value_dict["top_bc"] == "transmissive":
+            self.Un[:, :, : self.ng] = self.Un[:, :, self.ng : 2 * self.ng]
+
+        elif pin.value_dict["top_bc"] == "periodic":
+            self.Un[:, : self.ng] = self.Un[:, -2 * self.ng : -self.ng, :]
+
+        elif pin.value_dict["top_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
+
+        # Bottom boundary
+        if pin.value_dict["bottom_bc"] == "transmissive":
+            self.Un[:, :, : self.ng] = self.Un[:, :, self.ng : 2 * self.ng]
+
+        elif pin.value_dict["bottom_bc"] == "periodic":
+            self.Un[:, :, : self.ng] = self.Un[:, :, -2 * self.ng : -self.ng]
+
+        elif pin.value_dict["bottom_bc"] == "wall":
+            pass
+
+        else:
+            raise ValueError("Please use an implemented boundary condition type")
 
     def print_value(self, indvar: int, indx1: int, indx2: int) -> None:
         print(self.arr[indvar, indx1, indx2])
-
 
 
 def get_interm_array(nvar: int, nx1: int, nx2: int, dtype: np.dtype) -> np.ndarray:
