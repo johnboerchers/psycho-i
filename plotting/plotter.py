@@ -1,8 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+import itertools
+sys.path.append("..")
+from src.mesh import PsychoArray
 
 
-class Plotter:
+class PlotterFromFile:
     """Extends Matplotlib for plotting the output
     from the solver"""
 
@@ -48,7 +52,51 @@ class Plotter:
         plt.show()
 
 
-if __name__ == "__main__":
-    grid_sizing = {"dx": 0.2, "dy": 0.2, "Nx": 5, "Ny": 5}
-    plotter = Plotter({"u": "sample_u.txt", "v": "sample_v.txt"}, grid_sizing)
-    plotter.create_plot("u", "v")
+class PlotterDuringRun:
+    """Extends Matplotlib for plotting output during the
+    run"""
+
+    def __init__(self, pmesh: PsychoArray):
+
+        # Get information from the mesh needed
+        # for plotting
+        self.ng = pmesh.ng
+        self.rho = pmesh.Un[0, self.ng:-self.ng, self.ng:-self.ng]
+        self.u = pmesh.Un[1, self.ng:-self.ng, self.ng:-self.ng] / self.rho
+        self.v = pmesh.Un[2, self.ng:-self.ng, self.ng:-self.ng] / self.rho
+        self.et = pmesh.Un[3, self.ng:-self.ng, self.ng:-self.ng] / self.rho
+        self.primitives = {"rho": self.rho, "u": self.u, "v": self.v, "et": self.et}
+
+        # Create grid for plotting
+        self.x1 = np.arange(pmesh.x1min, pmesh.x1max, pmesh.dx1)
+        self.x2 = np.arange(pmesh.x2min, pmesh.x2max, pmesh.dx2)
+        self.x1_plot, self.x2_plot = np.meshgrid(self.x1, self.x2)
+
+
+    def create_plot(self, variables_to_plot: list[str], iter: int) -> None:
+
+        # Check to make sure desired output is one that exists and
+        # then pull the values which do exist
+        if not any([True for check in variables_to_plot if check in self.primitives.keys()]):
+            raise Exception("Please input only valid variables \n Valid variables are: rho, u, v, et")        
+
+        # Create plots for each variable, if more than 2 plots
+        # then create a new row
+        mod = len(variables_to_plot) % 2
+        if len(variables_to_plot) <= 2:
+            fig, axs = plt.subplots(1, len(variables_to_plot))
+        else:
+            fig, axs = plt.subplots(2, len(variables_to_plot) - mod)
+
+        for ax, var in zip(axs.flat, variables_to_plot): 
+            ax.set_xlim((self.x1[0], self.x1[-1]))
+            ax.set_ylim((self.x2[0], self.x2[-1]))
+
+            cf = ax.contourf(self.x1_plot, self.x2_plot, np.rot90(self.primitives[var]), 100, cmap ='jet')
+            ax.set_aspect('equal')
+            fig.colorbar(cf, label = f'{var}')
+
+        striter = str(iter).zfill(4)
+        plt.savefig(f"{striter}.png")
+        plt.close()
+
