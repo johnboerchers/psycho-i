@@ -38,3 +38,7 @@ def test_psycho_pgen():
     assert np.all(pmesh.Un[2, :, :] == 0.0)
 
 
+<<<<<<< HEAD:tests/test_.py
+=======
+
+>>>>>>> eabdb027ee9ced7c2b93230ff1dfe8d271a43ddc:tests/tests.py
