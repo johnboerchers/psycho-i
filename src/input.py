@@ -42,9 +42,15 @@ class PsychoInput:
                         or key == "top_bc"
                         or key == "bottom_bc"
                         or key == "data_file_type"
+                        or key == "stability_name"
                     ):
                         self.value_dict[key] = str(val)
-                    elif (key == "output_variables"):
-                        self.value_dict[key] = val
+                    elif (
+                        key == "output_variables"
+                        or key == "variables_to_plot"
+                        or key == "cmaps"
+                    ):
+                        val = val.strip("[]")
+                        self.value_dict[key] = [str(var) for var in val.split(",")]
                     else:
                         self.value_dict[key] = int(val)

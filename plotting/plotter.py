@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import numpy as np
 import sys
-import itertools
 sys.path.append("..")
 from src.mesh import PsychoArray
 
@@ -73,7 +73,7 @@ class PlotterDuringRun:
         self.x1_plot, self.x2_plot = np.meshgrid(self.x1, self.x2)
 
 
-    def create_plot(self, variables_to_plot: list[str], iter: int) -> None:
+    def create_plot(self, variables_to_plot: list[str], stability_name: str, cmaps: list[str], iter: int) -> None:
 
         # Check to make sure desired output is one that exists and
         # then pull the values which do exist
@@ -82,21 +82,60 @@ class PlotterDuringRun:
 
         # Create plots for each variable, if more than 2 plots
         # then create a new row
-        mod = len(variables_to_plot) % 2
-        if len(variables_to_plot) <= 2:
-            fig, axs = plt.subplots(1, len(variables_to_plot))
+        if len(variables_to_plot) <= 3:
+            fig, axs = plt.subplots(
+                1, len(variables_to_plot),
+                figsize=(10, 10),
+                )
         else:
-            fig, axs = plt.subplots(2, len(variables_to_plot) - mod)
+            fig, axs = plt.subplots(
+                2, 2,
+                figsize=(10, 10)
+                )
 
+        # Create each subplot
+        count = 0
         for ax, var in zip(axs.flat, variables_to_plot): 
             ax.set_xlim((self.x1[0], self.x1[-1]))
             ax.set_ylim((self.x2[0], self.x2[-1]))
 
-            cf = ax.contourf(self.x1_plot, self.x2_plot, np.rot90(self.primitives[var]), 100, cmap ='jet')
+            label_var = "default"
+            if var == "u":
+                label_var = r"$u$"
+            elif var == "v":
+                label_var = r"$v$"
+            elif var == "rho":
+                label_var = r"$\rho$"
+            elif var == "et":
+                label_var = r"$e_t$"
+            
+            cf = ax.contourf(self.x1_plot, self.x2_plot, np.rot90(self.primitives[var]), 100, cmap = cmaps[count])
             ax.set_aspect('equal')
-            fig.colorbar(cf, label = f'{var}')
+            ax.tick_params(
+                axis='both',
+                which='both',
+                bottom=False,
+                left=False,
+                labelbottom=False,
+                labelleft=False
+            )
+            cbar = fig.colorbar(
+                cf,
+                fraction=0.046, # magic scaling I found to keep the 
+                pad=0.04,       # colorbar the same size as the figure
+                orientation= "horizontal",
+                label = label_var
+            )
+            ticks = np.linspace(np.amin(self.primitives[var]), np.amax(self.primitives[var]), 6)
+            cbar.set_ticks(ticks)
+            count += 1
 
+        # Save the output plot
         striter = str(iter).zfill(4)
-        plt.savefig(f"{striter}.png")
+        fig.tight_layout()
+        fig.set_facecolor("lightgray")
+        fig.subplots_adjust(top=0.9)
+        fig.suptitle(stability_name, fontsize="xx-large", fontweight="bold", y=0.95)
+        plt.savefig("./output/plots/" + f"{striter}.png")
         plt.close()
 

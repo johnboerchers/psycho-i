@@ -44,3 +44,10 @@ output_frequency = 0.01
 
 # Desired data file type inputted as a string, options include: txt, csv, pickle, hdf5, numpy.save
 data_file_type = txt
+
+# Plotting (pick the variables to be plotted and do not put a space between them in 'variables to plot' - also
+# put the desired colormaps in the same order as the variable list)
+variables_to_plot = [rho,u,v]
+cmaps = [magma,jet,jet]
+stability_name = Kelvin-Helmholtz Instability
+
