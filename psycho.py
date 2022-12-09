@@ -162,9 +162,11 @@ if __name__ == "__main__":
             plotter = PlotterDuringRun(pmesh)
             plotter.create_plot(
                 pin.value_dict["variables_to_plot"],
-                pin.value_dict["stability_name"],
+                pin.value_dict["labels"],
                 pin.value_dict["cmaps"],
-                iter
+                pin.value_dict["stability_name"],
+                iter,
+                t
                 )
             #######################################
             print(f"{iter}       {t}       {dt}")

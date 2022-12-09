@@ -48,6 +48,7 @@ class PsychoInput:
                     elif (
                         key == "output_variables"
                         or key == "variables_to_plot"
+                        or key == 'labels'
                         or key == "cmaps"
                     ):
                         val = val.strip("[]")
