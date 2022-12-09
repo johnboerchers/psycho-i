@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+
 sys.path.append("..")
 from src.mesh import PsychoArray
 
@@ -16,15 +17,14 @@ class PlotterFromFile:
         self.grid_info = grid_info
 
         # Extract information needed for plotting
-        self.dx = grid_info['dx']
-        self.dy = grid_info['dy']
-        self.Nx = grid_info['Nx']
-        self.Ny = grid_info['Ny']
+        self.dx = grid_info["dx"]
+        self.dy = grid_info["dy"]
+        self.Nx = grid_info["Nx"]
+        self.Ny = grid_info["Ny"]
 
         self.x = [self.dx * self.Nx for self.Nx in range(self.Nx)]
         self.y = [self.dy * self.Ny for self.Ny in range(self.Ny)]
         self.xp, self.yp = np.meshgrid(self.x, self.y)
-
 
     def create_plot(self, *args) -> None:
 
@@ -36,7 +36,6 @@ class PlotterFromFile:
         for iter, each_var in enumerate(args):
             data[iter] = np.loadtxt("./plotting/" + f"{self.datafiles[each_var]}")
 
-
         # Create plots for variable supplied in
         # args
         fig, axs = plt.subplots(1, len(args))
@@ -45,8 +44,8 @@ class PlotterFromFile:
             ax.set_xlim((self.x[0], self.x[-1]))
             ax.set_ylim((self.y[0], self.y[-1]))
 
-            cf = ax.contourf(self.xp, self.yp, data[count], 100, cmap ='jet')
-            cbar = fig.colorbar(cf, label = f'{args[count]}')
+            cf = ax.contourf(self.xp, self.yp, data[count], 100, cmap="jet")
+            cbar = fig.colorbar(cf, label=f"{args[count]}")
 
         plt.show()
 
@@ -60,10 +59,10 @@ class PlotterDuringRun:
         # Get information from the mesh needed
         # for plotting
         self.ng = pmesh.ng
-        self.rho = pmesh.Un[0, self.ng:-self.ng, self.ng:-self.ng]
-        self.u = pmesh.Un[1, self.ng:-self.ng, self.ng:-self.ng] / self.rho
-        self.v = pmesh.Un[2, self.ng:-self.ng, self.ng:-self.ng] / self.rho
-        self.et = pmesh.Un[3, self.ng:-self.ng, self.ng:-self.ng] / self.rho
+        self.rho = pmesh.Un[0, self.ng : -self.ng, self.ng : -self.ng]
+        self.u = pmesh.Un[1, self.ng : -self.ng, self.ng : -self.ng] / self.rho
+        self.v = pmesh.Un[2, self.ng : -self.ng, self.ng : -self.ng] / self.rho
+        self.et = pmesh.Un[3, self.ng : -self.ng, self.ng : -self.ng] / self.rho
         self.primitives = {"rho": self.rho, "u": self.u, "v": self.v, "et": self.et}
 
         # Create grid for plotting
@@ -71,12 +70,23 @@ class PlotterDuringRun:
         self.x2 = np.arange(pmesh.x2min, pmesh.x2max, pmesh.dx2)
         self.x1_plot, self.x2_plot = np.meshgrid(self.x1, self.x2)
 
-
-    def create_plot(self, variables_to_plot: list[str], labels: list[str], cmaps: list[str], stability_name: str, iter: int, time: float) -> None:
+    def create_plot(
+        self,
+        variables_to_plot: list[str],
+        labels: list[str],
+        cmaps: list[str],
+        stability_name: str,
+        iter: int,
+        time: float,
+    ) -> None:
 
         # Check to make sure desired output is one that exists
-        if not any([True for check in variables_to_plot if check in self.primitives.keys()]):
-            raise Exception("Please input only valid variables \n Valid variables are: rho, u, v, et")        
+        if not any(
+            [True for check in variables_to_plot if check in self.primitives.keys()]
+        ):
+            raise Exception(
+                "Please input only valid variables \n Valid variables are: rho, u, v, et"
+            )
 
         # Create plots for each variable, if more than 2 plots
         # then create a new row
@@ -84,43 +94,49 @@ class PlotterDuringRun:
 
         if num_of_variables <= 3:
             fig, axs = plt.subplots(
-                1, num_of_variables,
+                1,
+                num_of_variables,
                 figsize=(10, 10),
-                )
+            )
         else:
-            fig, axs = plt.subplots(
-                2, 2,
-                figsize=(10, 10)
-                )
-        
-        count = 0        
-        for ax, var in zip(axs.flat, variables_to_plot): 
-            
+            fig, axs = plt.subplots(2, 2, figsize=(10, 10))
+
+        count = 0
+        for ax, var in zip(axs.flat, variables_to_plot):
+
             ax.set_xlim((self.x1[0], self.x1[-1]))
             ax.set_ylim((self.x2[0], self.x2[-1]))
-            
-            cf = ax.contourf(self.x1_plot, self.x2_plot, np.rot90(self.primitives[var]), 100, cmap = cmaps[count])
-            
-            ax.set_aspect('equal')
-            
+
+            cf = ax.contourf(
+                self.x1_plot,
+                self.x2_plot,
+                np.rot90(self.primitives[var]),
+                100,
+                cmap=cmaps[count],
+            )
+
+            ax.set_aspect("equal")
+
             ax.tick_params(
-                axis='both',
-                which='both',
+                axis="both",
+                which="both",
                 bottom=False,
                 left=False,
                 labelbottom=False,
-                labelleft=False
+                labelleft=False,
             )
-            
+
             cbar = fig.colorbar(
                 cf,
-                fraction=0.046, # magic scaling I found to keep the 
-                pad=0.04,       # colorbar the same size as the figure
-                orientation= "horizontal",
-                label = fr"${labels[count]}$"
+                fraction=0.046,  # magic scaling I found to keep the
+                pad=0.04,  # colorbar the same size as the figure
+                orientation="horizontal",
+                label=rf"${labels[count]}$",
             )
-            
-            ticks = np.linspace(np.amin(self.primitives[var]), np.amax(self.primitives[var]), 5)
+
+            ticks = np.linspace(
+                np.amin(self.primitives[var]), np.amax(self.primitives[var]), 5
+            )
             cbar.set_ticks(ticks)
             count += 1
 
@@ -133,8 +149,9 @@ class PlotterDuringRun:
         fig.subplots_adjust(top=0.87)
         fig.suptitle(
             stability_name + f"\n(t = {time:.3f} sec)",
-            fontsize="xx-large", fontweight="bold",
-            y=0.95
+            fontsize="xx-large",
+            fontweight="bold",
+            y=0.95,
         )
 
         plt.savefig("./output/plots/" + f"{striter}.png")
