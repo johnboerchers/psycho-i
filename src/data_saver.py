@@ -1,5 +1,4 @@
-# Reads data saving preferences; function is called in main.py to output desired quantities
-# Or make a class where each of the inputs is a property and the instance of the class is the output and can be inherited for plotting
+# Reads data saving preferences; Saves requested variable data using requested file format and print frequency
 
 import sys
 
