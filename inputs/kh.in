@@ -45,10 +45,13 @@ output_frequency = 0.01
 # Desired data file type inputted as a string, options include: txt, csv, pickle, hdf5, numpy.save
 data_file_type = txt
 
-# Plotting (pick the variables to be plotted and do not put a space between them in 'variables to plot' - also
-# put the desired colormaps in the same order as the variable list)
-variables_to_plot = [rho,u,v,et]
-labels = [\rho,u,v,e_t]
-cmaps = [magma,jet,jet,bwr]
+#  ----------------------------------------- Plotting -----------------------------------------------
+# Pick the variables to be plotted and do not put a space between them in 'variables to plot,' 'labels,' or
+# 'cmaps.' Put the desired labels in latex form and enter the corresponding desired cmaps in the same order.
+# Style mode will turn everything off and fill the entire figure with the image (use with only one variable)
+variables_to_plot = [rho,u,v]
+labels = [\rho,u,v]
+cmaps = [magma,jet]
 stability_name = Kelvin-Helmholtz Instability
+style_mode = False
 

@@ -53,5 +53,7 @@ class PsychoInput:
                     ):
                         val = val.strip("[]")
                         self.value_dict[key] = [str(var) for var in val.split(",")]
+                    elif (key == "style_mode"):
+                        self.value_dict[key] = eval(val)
                     else:
                         self.value_dict[key] = int(val)
