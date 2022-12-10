@@ -58,11 +58,6 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
     pmesh.Un[2, :, int(pin.value_dict["nx2"] * 0.25)] = rho1 * v1
     pmesh.Un[2, :, int(pin.value_dict["nx2"] * -0.25)] = rho1 * v1
 
-    fig = plt.figure(figsize=(8,8))
-    plt.imshow(np.rot90(pmesh.Un[2,:,:]/pmesh.Un[0,:,:]))
-    plt.savefig("init.png")
-    plt.close()
-
     # Pressures for calculating total energy
     pressures[:, :] = p0
 

@@ -34,7 +34,6 @@ class PsychoInput:
                     val = line.split("=")[1].strip()
 
                     # Numbers with `.` are stored as floats, otherwise ints
-                    # NEED TO CHANGE THIS TO HANDLE STRINGS TOO
                     if "." in val:
                         self.value_dict[key] = float(val)
                     elif (
@@ -42,10 +41,21 @@ class PsychoInput:
                         or key == "right_bc"
                         or key == "top_bc"
                         or key == "bottom_bc"
+                        or key == "stability_name"
                         or key == "output_variables"
                         or key == "output_frequency"
                         or key == "data_file_type"
                     ):
                         self.value_dict[key] = str(val)
+                    elif (
+                        key == "output_variables"
+                        or key == "variables_to_plot"
+                        or key == 'labels'
+                        or key == "cmaps"
+                    ):
+                        val = val.strip("[]")
+                        self.value_dict[key] = [str(var) for var in val.split(",")]
+                    elif (key == "style_mode"):
+                        self.value_dict[key] = eval(val)
                     else:
                         self.value_dict[key] = int(val)

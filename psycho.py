@@ -5,6 +5,7 @@ from src.mesh import PsychoArray, get_interm_array
 from src.reconstruct import get_limited_slopes, get_unlimited_slopes
 from src.tools import calculate_timestep, get_fluxes_1d, get_fluxes_2d
 from src.riemann import solve_riemann
+from plotting.plotter import Plotter
 import numpy as np
 import argparse
 import matplotlib.pyplot as plt
@@ -163,15 +164,18 @@ if __name__ == "__main__":
 
         if iter % print_freq == 0:
             #######################################
-            # Temporary plotting for debugging, 
-            # can be removed when not needed
+            # Plot during the run
             #######################################
-            striter = str(iter).zfill(4)
-            fig = plt.figure(figsize=(8,8))
-            plt.imshow(np.rot90(pmesh.Un[0,:,:]))
-            plt.colorbar()
-            plt.savefig(f"test.{striter}.png")
-            plt.close()
+            plotter = Plotter(pmesh)
+            plotter.create_plot(
+                pin.value_dict["variables_to_plot"],
+                pin.value_dict["labels"],
+                pin.value_dict["cmaps"],
+                pin.value_dict["stability_name"],
+                pin.value_dict["style_mode"],
+                iter,
+                t
+                )
             #######################################
             print(f"{iter}       {t}       {dt}")
 
