@@ -85,7 +85,6 @@ class PsychoOutput:
         if "x-velocity" in self.variables:
             
             for j in reversed(range(u.shape[0]-4)):
-                print(j)
                 for i in reversed(range(u.shape[1]-4)):
                     self.xvelocity_file.write(str(u[i+2][j+2]))
                     self.xvelocity_file.write(' ')
