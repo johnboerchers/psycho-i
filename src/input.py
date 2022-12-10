@@ -42,6 +42,9 @@ class PsychoInput:
                         or key == "right_bc"
                         or key == "top_bc"
                         or key == "bottom_bc"
+                        or key == "output_variables"
+                        or key == "output_frequency"
+                        or key == "data_file_type"
                     ):
                         self.value_dict[key] = str(val)
                     else:
