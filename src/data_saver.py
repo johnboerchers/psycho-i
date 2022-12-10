@@ -84,7 +84,7 @@ class PsychoOutput:
         if "x-velocity" in self.variables:
             
             for j in reversed(range(u.shape[0]-4)):
-                for i in reversed(range(u.shape[1]-4)):
+                for i in range(u.shape[1]-4):
                     self.xvelocity_file.write(str(u[i+2][j+2]))
                     self.xvelocity_file.write(' ')
                 self.xvelocity_file.write('\n')
@@ -94,7 +94,7 @@ class PsychoOutput:
         if "y-velocity" in self.variables:   
 
             for j in reversed(range(v.shape[0]-4)):
-                for i in reversed(range(v.shape[1]-4)):
+                for i in range(v.shape[1]-4):
                     self.yvelocity_file.write(str(v[i+2][j+2]))
                     self.yvelocity_file.write(' ')
                 self.yvelocity_file.write('\n')
@@ -104,7 +104,7 @@ class PsychoOutput:
         if "density" in self.variables:
 
             for j in reversed(range(rho.shape[0]-4)):
-                for i in reversed(range(rho.shape[1]-4)):
+                for i in range(rho.shape[1]-4):
                     self.density_file.write(str(rho[i+2][j+2]))
                     self.density_file.write(' ')
                 self.density_file.write('\n')
@@ -114,7 +114,7 @@ class PsychoOutput:
         if "pressure" in self.variables:
 
             for j in reversed(range(p.shape[0]-4)):
-                for i in reversed(range(p.shape[1]-4)):
+                for i in range(p.shape[1]-4):
                     self.pressure_file.write(str(p[i+2][j+2]))
                     self.pressure_file.write(' ')
                 self.pressure_file.write('\n')
