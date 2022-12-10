@@ -1,4 +1,5 @@
 from src.input import PsychoInput
+from src.data_saver import PsychoOutput
 from src.pgen import kh
 from src.mesh import PsychoArray, get_interm_array
 from src.reconstruct import get_limited_slopes, get_unlimited_slopes
@@ -38,6 +39,10 @@ if __name__ == "__main__":
     else:
         raise ValueError("Please use an implemented problem type")
 
+    # Initialize data saving preferences
+    pout = PsychoOutput(input_fname=input_fname)
+    pout.data_preferences(pin)
+
     # Initialize the simulation
     problem_generator(pin, pmesh)
 
@@ -46,7 +51,7 @@ if __name__ == "__main__":
     tmax = float(pin.value_dict["tmax"])
     cfl = float(pin.value_dict["CFL"])
     gamma = float(pin.value_dict["gamma"])
-    print_freq = 50
+    print_freq = float(pin.value_dict['output_frequency'])
 
     # Initialize scratch arrays for intermediate calculations
     nx1 = pin.value_dict["nx1"]
@@ -152,7 +157,9 @@ if __name__ == "__main__":
             F[:, :-1, 1:-1] - F[:, 1:, 1:-1]
         ) + dt / pmesh.dx2 * (G[:, 1:-1, :-1] - G[:, 1:-1, 1:])
 
-        # SAVE DATA HERE??
+        # Save Data
+        if iter % print_freq == 0:
+            pout.save_data(pmesh.Un,t,tmax,gamma)
 
         if iter % print_freq == 0:
             #######################################
