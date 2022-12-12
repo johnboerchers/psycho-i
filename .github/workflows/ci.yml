@@ -22,12 +22,12 @@ jobs:
         uses: actions/configure-pages@v2
 
       - name: build output
-        run: pipx run nox -s docs
+        run: nox -s docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: docs/build
+          path: docs/_build
 
   format:
     runs-on: ubuntu-latest
