@@ -54,6 +54,7 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
 
     # Y velocity needs to be tripped by random velocity perturbations to start instability
     v1 = pin.value_dict["pert_amp"] * np.random.random(size=pmesh.Un[0, :, 0].size)
+    v2 = pin.value_dict["pert_amp"] * np.random.random(size=pmesh.Un[0, :, 0].size)
     # print(f"V1 : {v1}")
 
     # Filling array values
@@ -68,7 +69,7 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
     # Density times y velocity
     pmesh.Un[2, :, :] = rho0 * 0.0
     pmesh.Un[2, :, int(pin.value_dict["nx2"] * 0.25)] = rho1 * v1
-    pmesh.Un[2, :, int(pin.value_dict["nx2"] * -0.25)] = rho1 * v1
+    pmesh.Un[2, :, int(pin.value_dict["nx2"] * -0.25)] = -rho1 * v2
 
     # Pressures for calculating total energy
     pressures[:, :] = p0

@@ -229,8 +229,8 @@ class Plotter:
         if style_mode:
             fig.tight_layout(pad=0)
             fig.set_facecolor("dimgray")
-            plt.savefig("./output/plots/" + f"{striter}.png")
-        plt.savefig("./output/plots/" + f"{striter}.png")
+            plt.savefig("output/plots/" + f"{striter}.png")
+        plt.savefig("output/plots/" + f"{striter}.png")
         plt.close()
 
         return
