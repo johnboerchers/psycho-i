@@ -22,11 +22,11 @@ autodoc_mock_imports = ["numba"]
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    #"myst_parser",
+    "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
-    #"sphinx_copybutton",
+    "sphinx_copybutton",
     ]
 
 templates_path = ['_templates']
