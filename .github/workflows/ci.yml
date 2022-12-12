@@ -21,11 +21,10 @@ jobs:
         id: pages
         uses: actions/configure-pages@v2
 
-      - name: install package
-        run: python -m pip install .[docs]
-
+      - uses: actions/checkout@v3
+      
       - name: build output
-        run: nox -s docs
+        run: pipx run nox -s docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
