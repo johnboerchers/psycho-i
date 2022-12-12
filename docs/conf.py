@@ -13,6 +13,7 @@ release = '0.0.1'
 
 import os
 import sys
+import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('../src'))
 sys.path.insert(0, os.path.abspath('../src/pgen'))
 sys.path.insert(0, os.path.abspath('../plotting'))
@@ -27,6 +28,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx_copybutton",
+    "sphinx_rtd_theme"
     ]
 
 templates_path = ['_templates']
