@@ -17,7 +17,7 @@ def get_primitive_variables_1d(Un: np.ndarray, gamma: float):
     Parameters
     ----------
     Un : ndarray[float]
-        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
+        Conserved variables
     gamma : float
         Specific heat ratio
     
@@ -53,7 +53,7 @@ def get_primitive_variables_2d(Un: np.ndarray, gamma: float):
     Parameters
     ----------
     Un : ndarray[float]
-        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
+        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
     gamma : float
         Specific heat ratio
     
@@ -90,7 +90,7 @@ def get_fluxes_1d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
     Parameters
     ----------
     Un : ndarray[float]
-        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
+        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
     gamma : float
         Specific heat ratio
     direction : str
@@ -102,7 +102,7 @@ def get_fluxes_1d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
         The computed flux vector at one cell in the specified direction
 
     """
-    
+
     F = np.zeros_like(Un)
     rho, u, v, p = get_primitive_variables_1d(Un, gamma)
 
@@ -133,7 +133,7 @@ def get_fluxes_2d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
     Parameters
     ----------
     Un : ndarray[float]
-        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
+        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
     gamma : float
         Specific heat ratio
     direction : str
@@ -168,6 +168,7 @@ def get_fluxes_2d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
 
 def calculate_timestep(pmesh: PsychoArray, cfl: float, gamma: float) -> float:
     """Calculates the maximum timestep allowed for a given CFL to remain stable
+
 
     Parameters
     ----------

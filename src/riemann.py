@@ -19,11 +19,9 @@ def solve_riemann(
     Parameters
     ----------
     U_l : ndarray[float]
-        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
-        at the left cell face
+        Conserved variables at the left cell face
     U_r : ndarray[float]
-        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
-        at the right cell face
+        Conserved variables at the right cell face
     gamma : float
         Specific heat ratio
     direction : str

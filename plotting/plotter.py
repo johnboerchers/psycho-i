@@ -19,36 +19,38 @@ class Plotter:
     ----------
     ng : int
         Number of ghost cells
-    rho : NumPy.ndarray[float]
+
+    rho : ndarray[float]
         Array containing the rho (density) value at each point in space at
         a given time
-    u : NumPy.ndarray[float]
+
+    u : ndarray[float]
         Array containing the u (horizontal velocity) value at each
         point in space at a given time
-    v : NumPy.ndarray[float]
+
+    v : ndarray[float]
         Array continaing the v (vertical velocity) value at each point
         in space at a given time
-    et : NumPy.ndarray[float]
+
+    et : ndarray[float]
         Array containing the et (total energy) value at each point in space
         at a given time
+
     primitives: dict
         Dictionary containing each primitive (rho, u, v, et) with a corresponding
         key
-    x1 : NumPy.ndarray[float]
+
+    x1 : ndarray[float]
         Vector containing the x1 values
-    x2 : NumPy.ndarray[float]
+
+    x2 : ndarray[float]
         Vector containing the x2 values
-    x1_plot : NumPy.ndarray[float]
+
+    x1_plot : ndarray[float]
         Array of x1 values after using meshrid for plotting
-    x2_plot : NumPy.ndarray[float]
+
+    x2_plot : ndarray[float]
         Array of x2 values after using meshgrid for plotting
-
-
-    Methods
-    -------
-    create_plot
-        Creates the plots for desired variables at a given time
-
 
     """
 

@@ -20,15 +20,6 @@ class PsychoOutput:
     input_fname : str
         File name for the output file
 
-    Methods
-    -------
-    data_preferences :
-        Sets the data preferences according to the options
-        selected in the problem input
-    
-    save_data : 
-        Saves the data to the desired output files
-
     """
 
     def __init__(self, input_fname: str):

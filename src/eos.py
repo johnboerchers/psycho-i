@@ -15,7 +15,7 @@ def p_EOS(
 ) -> Union[float, np.ndarray]:
     """Equation of state for pressure
 
-    math:: p = '\rho' * ('gamma' - 1) * e
+    .. math:: p = \\rho * (\\gamma - 1) * e
 
     Parameters
     ----------
@@ -43,7 +43,7 @@ def e_EOS(
 ) -> Union[float, np.ndarray]:
     """Equation of state for internal energy
 
-    math:: e = p / ('\rho' * ('gamma' - 1))
+    .. math:: e = p / (\\rho * (\\gamma - 1))
 
     Parameters
     ----------

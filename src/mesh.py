@@ -49,13 +49,7 @@ class PsychoArray:
         Step size in the x1 and x2 directions
 
     Un : ndarray[dtype]
-        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t,
-
-    Methods
-    -------
-    enforce_bcs : 
-        Enforces the boundary conditions set in the problem input on the
-        conserved variables
+        Conserved variables
     
     """
     def __init__(self, pin: PsychoInput, dtype: np.dtype) -> None:

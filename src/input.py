@@ -22,11 +22,6 @@ class PsychoInput:
         Dictionary containing the problem input
         information (after parsing the input file)
 
-    Methods
-    -------
-    parse_input_file : 
-        Parses and stores information from the input file
-
     """
     def __init__(self, input_fname: str):
 

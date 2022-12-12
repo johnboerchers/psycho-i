@@ -6,10 +6,17 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'psycho-i'
+project = 'Psycho-i'
 copyright = '2022, Trevor Fush, John Boerchers, Sydney Rzepka'
 author = 'Trevor Fush, John Boerchers, Sydney Rzepka'
 release = '0.0.1'
+
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, os.path.abspath('../src/pgen'))
+sys.path.insert(0, os.path.abspath('../plotting'))
+autodoc_mock_imports = ["numba"]
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
