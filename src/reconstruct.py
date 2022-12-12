@@ -8,6 +8,15 @@ def get_unlimited_slopes(
     U_i_jm1: np.ndarray,
     w: float,
 ):
+    """One line description
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    """
     delta_imoh = U_i_j - U_im1_j
     delta_ipoh = U_ip1_j - U_i_j
     delta_jmoh = U_i_j - U_i_jm1
@@ -26,10 +35,22 @@ def get_limited_slopes(
     U_i_jm1: np.ndarray,
     beta: float,
 ):
-    """
-    NEED TO ADD DOCUMENTATION HERE
+    """Minmod slope limiter to handle discontinuities
 
-    based on page 508 minmod slope limiter in Toro book
+    Minimod slope limiter based on page 508 in [1], necessary
+    for handling discontinuities
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    References
+    ----------
+    [1] Toro, E. F. (2011). Riemann solvers and Numerical Methods for fluid dynamics:
+    A practical introduction. Springer. 
+
     """
     delta_imoh = U_i_j - U_im1_j
     delta_ipoh = U_ip1_j - U_i_j

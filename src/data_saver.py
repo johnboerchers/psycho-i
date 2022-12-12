@@ -10,7 +10,27 @@ from src.tools import get_primitive_variables_2d
 import numpy as np
 
 class PsychoOutput:
+    """Class for producing the desired output
+
+    Produces the desired output variables in the desired
+    format - set in the problem input
+
+    Attributes
+    ----------
+    input_fname : str
+        File name for the output file
+
+    Methods
+    -------
+    data_preferences :
+        Sets the data preferences according to the options
+        selected in the problem input
     
+    save_data : 
+        Saves the data to the desired output files
+
+    """
+
     def __init__(self, input_fname: str):
 
         self.input_fname = input_fname
@@ -22,6 +42,13 @@ class PsychoOutput:
         """
         This function is called in `psycho.py` and sets the data preferences
         specified in the problem input (pin).
+        
+        Parameters
+        ----------
+        pin : PsychoInput
+            Contains the problem information stored in the PsychoInput
+            object
+        
         """
 
         # Get output variables as a list
@@ -77,7 +104,25 @@ class PsychoOutput:
             raise ValueError("No output file type specified in input.")
     
 
-    def save_data(self, pmesh: src.mesh.PsychoArray, t, tmax, gamma):
+    def save_data(self, pmesh: src.mesh.PsychoArray, t: float, tmax: float, gamma: float) -> None:
+        """Saves the data to to the desired format
+
+        Parameters
+        ----------
+        pmesh : PsychoArray
+            PsychoArray mesh which contains all of the mesh information
+            and the conserved variables, Un
+
+        t : float
+            The current time
+
+        tmax : float
+            The maximum time or the time the simulations runs until
+
+        gamma : float
+            Specific heat ratio
+        
+        """
         rho, u, v, p = get_primitive_variables_2d(pmesh,gamma)
     
         var_check = 0

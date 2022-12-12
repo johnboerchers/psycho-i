@@ -26,6 +26,12 @@ test = [
    "pytest>=7.0",
    "nox>=2022.8.7",
 ]
+docs = [
+    "furo",  # Theme
+    "myst_parser >=0.13",  # Markdown
+    "sphinx >=4.0",
+    "sphinx_copybutton",  # Easy code copy button
+]
 
 [tool.pytest.ini_options]
 pythonpath = [

@@ -17,8 +17,9 @@ class PsychoOutput:
 
     def data_preferences(self, pin: src.input.PsychoInput) -> None:
         """
-        This function is called in `main.py` and sets the data preferences
-        specified in the problem input (pin).
+        This function is called in `main.py` (or psycho.py) and sets
+        the data preferences specified in the problem input (pin).
+
         """
 
         # Get output variables as a list

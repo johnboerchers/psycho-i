@@ -11,9 +11,36 @@ from numba import njit
 def solve_riemann(
     U_l: np.ndarray, U_r: np.ndarray, gamma: float, direction: str
 ) -> np.ndarray:
-    """
-    Solves the Riemann problem using a HLLC Riemann solver (outlined in Toro)
-    adapted from page 322
+    """Solve the Riemann problem
+
+    Solves the Riemann problem using a HLLC Riemann solver - outlined in Toro
+    adapted from page 322 (see [1])
+
+    Parameters
+    ----------
+    U_l : ndarray[float]
+        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
+        at the left cell face
+    U_r : ndarray[float]
+        Conserved variables: math:: '\rho', '\rho' * u, '\rho' * v, '\rho' * e_t
+        at the right cell face
+    gamma : float
+        Specific heat ratio
+    direction : str
+        Specify the 'x' or 'y' direction 
+
+    Returns
+    -------
+    F : ndarray[float]
+        The flux in the specified direction returned from the
+        Riemann problem
+
+
+    References
+    -----------
+    [1] Toro, E. F. (2011). Riemann solvers and Numerical Methods for fluid dynamics:
+    A practical introduction. Springer. 
+
     """
 
     U_state = np.zeros(4)
