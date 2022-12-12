@@ -24,8 +24,8 @@ u1    = -0.3
 pert_amp = 0.1
 
 # Time info
-CFL   = 0.3
-tmax  = 5.0
+CFL   = 0.5
+tmax  = 10.0
 
 gamma = 1.4
 
@@ -50,7 +50,7 @@ data_file_type = txt
 # Style mode will turn everything off and fill the entire figure with the image (use with only one variable)
 variables_to_plot = [rho,u,v,et]
 labels = [\rho,u,v,e_t]
-cmaps = [magma,jet,jet,bwr]
+cmaps = [jet,ocean,ocean,hot]
 stability_name = Kelvin-Helmholtz Instability
 style_mode = False
 
