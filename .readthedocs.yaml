@@ -23,8 +23,8 @@ sphinx:
 # formats:
 #    - pdf
 
-conda:
-  environment: workflow/environment.yml
+#conda:
+#  environment: workflow/environment.yml
 
 python:
   version: "3.8"
