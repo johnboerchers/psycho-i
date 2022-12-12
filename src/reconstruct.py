@@ -8,13 +8,27 @@ def get_unlimited_slopes(
     U_i_jm1: np.ndarray,
     w: float,
 ):
-    """One line description
+    """Find the slopes without a limiter
 
     Parameters
     ----------
+    U_i_j : ndarray[float]
+
+    U_ip1_j : ndarray[float]
+
+    U_im1_j : ndarray[float]
+
+    U_i_jp1 : ndarray[float]
+
+    U_i_jm1 : ndarray[float]
+
+    w : float
 
     Returns
     -------
+    delta_i : ndarray[float]
+
+    delta_j : ndarray[float]
 
     """
     delta_imoh = U_i_j - U_im1_j
@@ -42,9 +56,23 @@ def get_limited_slopes(
 
     Parameters
     ----------
+    U_i_j : ndarray[float]
+
+    U_ip1_j : ndarray[float]
+
+    U_im1_j : ndarray[float]
+
+    U_i_jp1 : ndarray[float]
+
+    U_i_jm1 : ndarray[float]
+
+    beta : float
 
     Returns
     -------
+    delta_i : ndarray[float]
+
+    delta_j : ndarray[float]
 
     References
     ----------
