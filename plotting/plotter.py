@@ -20,19 +20,19 @@ class Plotter:
     ng : int
         Number of ghost cells
 
-    rho : array_like
+    rho : ndarray[float]
         Array containing the rho (density) value at each point in space at
         a given time
 
-    u : array_like
+    u : ndarray[float]
         Array containing the u (horizontal velocity) value at each
         point in space at a given time
 
-    v : array_like
+    v : ndarray[float]
         Array continaing the v (vertical velocity) value at each point
         in space at a given time
 
-    et : array_like
+    et : ndarray[float]
         Array containing the et (total energy) value at each point in space
         at a given time
 
@@ -40,16 +40,16 @@ class Plotter:
         Dictionary containing each primitive (rho, u, v, et) with a corresponding
         key
 
-    x1 : array_like
+    x1 : ndarray[float]
         Vector containing the x1 values
 
-    x2 : array_like
+    x2 : ndarray[float]
         Vector containing the x2 values
 
-    x1_plot : array_like
+    x1_plot : ndarray[float]
         Array of x1 values after using meshrid for plotting
 
-    x2_plot : array_like
+    x2_plot : ndarray[float]
         Array of x2 values after using meshgrid for plotting
 
     """
