@@ -6,6 +6,23 @@
 
 
 class PsychoInput:
+    """Class containing the input information
+
+    Parameters
+    ----------
+    input_fname : str
+        The name of the input file
+
+    Attributes
+    ----------
+    input_fname : str
+        The name of the input file
+
+    value_dict : dict
+        Dictionary containing the problem input
+        information (after parsing the input file)
+
+    """
     def __init__(self, input_fname: str):
 
         self.input_fname = input_fname
@@ -14,9 +31,11 @@ class PsychoInput:
         self.value_dict = dict()
 
     def parse_input_file(self) -> None:
-        """
+        """Parses and stores information from input file
+        
         Loops through parameter file and stores values from file
         to be used in problem generator
+        
         """
 
         with open(self.input_fname) as f:

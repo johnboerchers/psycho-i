@@ -9,8 +9,29 @@ from numba import njit
 
 @njit()
 def get_primitive_variables_1d(Un: np.ndarray, gamma: float):
-    """
-    NEED TO ADD DOCUMENTATION
+    """Returns the primitive variables at a point provided Un.
+
+    This function returns the primitive variables at a single point
+    provided the conserved variables Un are provided at the same point.
+
+    Parameters
+    ----------
+    Un : ndarray[float]
+        Conserved variables
+    gamma : float
+        Specific heat ratio
+    
+    Returns
+    -------
+    rho : float
+        Density
+    u : float
+        Horizontal velocity
+    v : float
+        Vertical velocity
+    p : float
+        Pressure
+
     """
     rho = Un[0]
     u = Un[1] / rho
@@ -24,8 +45,29 @@ def get_primitive_variables_1d(Un: np.ndarray, gamma: float):
 
 @njit()
 def get_primitive_variables_2d(Un: np.ndarray, gamma: float):
-    """
-    NEED TO ADD DOCUMENTATION
+    """Returns the primitive variables for all points provided Un.
+
+    This function returns the primitive variables for all points
+    provided the conserved variables Un are provided.
+
+    Parameters
+    ----------
+    Un : ndarray[float]
+        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
+    gamma : float
+        Specific heat ratio
+    
+    Returns
+    -------
+    rho : ndarray[float]
+        Density
+    u : ndarray[float]
+        Horizontal velocity
+    v : ndarray[float]
+        Vertical velocity
+    p : ndarray[float]
+        Pressure
+
     """
 
     rho = Un[0, :, :]
@@ -40,9 +82,25 @@ def get_primitive_variables_2d(Un: np.ndarray, gamma: float):
 
 @njit()
 def get_fluxes_1d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
-    """
-    Returns fluxes for input array... need to be more descriptive but
-    this is what's on the right side of the board
+    """Returns fluxes provided the conserved variables, Un, at a point
+
+    This function returns the fluxes in the x or y direction at one specified
+    cell provided the conserved variables, Un, at the specified cell
+
+    Parameters
+    ----------
+    Un : ndarray[float]
+        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
+    gamma : float
+        Specific heat ratio
+    direction : str
+        Specify the 'x' or 'y' direction 
+    
+    Returns
+    -------
+    F : ndarray[float]
+        The computed flux vector at one cell in the specified direction
+
     """
 
     F = np.zeros_like(Un)
@@ -67,9 +125,25 @@ def get_fluxes_1d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
 
 @njit()
 def get_fluxes_2d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
-    """
-    Returns fluxes for input array... need to be more descriptive but
-    this is what's on the right side of the board
+    """Returns fluxes provided the conserved variables, Un, for all cells
+
+    This function returns the fluxes in the x or y direction for all cells
+    provided the conserved variables, Un.
+
+    Parameters
+    ----------
+    Un : ndarray[float]
+        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
+    gamma : float
+        Specific heat ratio
+    direction : str
+        Specify the 'x' or 'y' direction 
+    
+    Returns
+    -------
+    F : ndarray[float]
+        The computed flux vector at all cells in the specified direction
+
     """
 
     F = np.zeros_like(Un)
@@ -93,8 +167,26 @@ def get_fluxes_2d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
 
 
 def calculate_timestep(pmesh: PsychoArray, cfl: float, gamma: float) -> float:
-    """
-    NEED TO ADD DOCUMENTATION
+    """Calculates the maximum timestep allowed for a given CFL to remain stable
+
+
+    Parameters
+    ----------
+    pmesh : PsychoArray
+        PsychoArray mesh which contains all of the current mesh information
+        and the conserved variables Un
+    cfl : float
+        Courant-Freidrichs-Lewy condition necessary for stability when
+        choosing the timestep
+    gamma: float
+        Specific heat ratio
+    
+
+    Returns
+    -------
+    float
+        The calculated timestep for the provided conditions
+
     """
     # print(type(cfl), type(gamma))
     rho, u, v, p = get_primitive_variables_2d(pmesh.Un, gamma)
