@@ -18,7 +18,8 @@ dependencies = [
   "matplotlib",
   "mypy",
   "pip",
-  "pre-commit>=2.20.0"
+  "pre-commit>=2.20.0",
+  "myst-parser"
 ]
 
 [project.optional-dependencies]
