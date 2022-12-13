@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
         # Save Data
         if iter % print_freq == 0:
-            pout.save_data(pmesh.Un,t,tmax,gamma)
+            pout.save_data(pmesh.Un,t,tmax,gamma,iter)
 
         if iter % print_freq == 0:
             #######################################
