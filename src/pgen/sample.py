@@ -15,11 +15,23 @@ import src.input
 def sampleProblemGenerator(
     pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray
 ) -> None:
-    """
+    """Generates the problem in by inputting the information to the problem mesh
+
     This function is called in `main.py` and sets the initial conditions
     specified in the problem input (pin) onto the problem mesh (pmesh).
 
     Needs to exist for each problem type in order for everything to work.
+
+    Parameters
+    ----------
+    pin : PsychoInput
+        Contains the problem information stored in the PsychoInput
+        object
+
+    pmesh : PsychoArray
+        PsychoArray mesh which contains all of the current mesh information
+        and the conserved variables Un
+
     """
 
     rho0 = pin.value_dict["rho0"]

@@ -10,8 +10,20 @@ from src.tools import get_primitive_variables_2d
 import numpy as np
 import h5py
 
+
 class PsychoOutput:
-    
+    """Class for producing the desired output
+
+    Produces the desired output variables in the desired
+    format - set in the problem input
+
+    Attributes
+    ----------
+    input_fname : str
+        File name for the output file
+
+    """
+
     def __init__(self, input_fname: str):
 
         self.input_fname = input_fname
@@ -23,6 +35,13 @@ class PsychoOutput:
         """
         This function is called in `psycho.py` and sets the data preferences
         specified in the problem input (pin).
+
+        Parameters
+        ----------
+        pin : PsychoInput
+            Contains the problem information stored in the PsychoInput
+            object
+
         """
 
         self.Nx = pin.value_dict["nx1"]
@@ -33,11 +52,9 @@ class PsychoOutput:
 
         # Get output variables as a list
         self.variables = pin.value_dict["output_variables"]
-    
 
         # Get output frequency
         self.frequency = pin.value_dict["output_frequency"]
-    
 
         # Get output file type
         self.file_type = pin.value_dict["data_file_type"]
@@ -51,7 +68,7 @@ class PsychoOutput:
             self.yvelocity_file = open("y-velocity.txt", "w").close()
             self.pressure_file = open("pressure.txt", "w").close()
             self.iter_time_file = open("iter_time.txt", "w").close()
-
+            
             self.density_file = open("density.txt", "w")
             self.xvelocity_file = open("x-velocity.txt", "w")
             self.yvelocity_file = open("y-velocity.txt", "w")
@@ -86,8 +103,28 @@ class PsychoOutput:
 
             raise ValueError("No correctly spelled output file type specified in input.")
     
+    
+    def save_data(
+        self, pmesh: src.mesh.PsychoArray, t: float, tmax: float, gamma: float, iter: float
+    ) -> None:
+        """Saves the data to to the desired format
 
-    def save_data(self, pmesh: src.mesh.PsychoArray, t, tmax, gamma,iter):
+        Parameters
+        ----------
+        pmesh : PsychoArray
+            PsychoArray mesh which contains all of the mesh information
+            and the conserved variables, Un
+
+        t : float
+            The current time
+
+        tmax : float
+            The maximum time or the time the simulations runs until
+
+        gamma : float
+            Specific heat ratio
+
+        """
         
         if (self.file_type_check==1): # writing to txt file
 
@@ -287,5 +324,3 @@ class PsychoOutput:
                 self.yvelocity_file.close()
                 self.pressure_file.close()
                 self.iter_time_file.close()
-
-  

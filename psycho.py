@@ -2,12 +2,12 @@ from src.input import PsychoInput
 from src.data_saver import PsychoOutput
 from src.pgen import kh
 from src.mesh import PsychoArray, get_interm_array
-from src.reconstruct import get_limited_slopes, get_unlimited_slopes
-from src.tools import calculate_timestep, get_fluxes_1d, get_fluxes_2d
+from src.reconstruct import get_limited_slopes
+from src.tools import calculate_timestep, get_fluxes_2d
 from src.riemann import solve_riemann
+from plotting.plotter import Plotter
 import numpy as np
 import argparse
-import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 
@@ -51,6 +51,7 @@ if __name__ == "__main__":
     tmax = float(pin.value_dict["tmax"])
     cfl = float(pin.value_dict["CFL"])
     gamma = float(pin.value_dict["gamma"])
+
     print_freq = float(pin.value_dict['output_frequency'])
 
     # Initialize scratch arrays for intermediate calculations
@@ -134,7 +135,9 @@ if __name__ == "__main__":
         G_j_L = get_fluxes_2d(U_j_L, gamma, "y")
         G_j_R = get_fluxes_2d(U_j_R, gamma, "y")
 
-        int_flux = 1 / 2 * dt / pmesh.dx1 * (F_i_L - F_i_R) + 1 / 2 * dt / pmesh.dx2 * (G_j_L - G_j_R)
+        int_flux = 1 / 2 * dt / pmesh.dx1 * (F_i_L - F_i_R) + 1 / 2 * dt / pmesh.dx2 * (
+            G_j_L - G_j_R
+        )
 
         U_i_L += int_flux
         U_i_R += int_flux
@@ -163,15 +166,18 @@ if __name__ == "__main__":
 
         if iter % print_freq == 0:
             #######################################
-            # Temporary plotting for debugging, 
-            # can be removed when not needed
+            # Plot during the run
             #######################################
-            striter = str(iter).zfill(4)
-            fig = plt.figure(figsize=(8,8))
-            plt.imshow(np.rot90(pmesh.Un[0,:,:]))
-            plt.colorbar()
-            plt.savefig(f"test.{striter}.png")
-            plt.close()
+            plotter = Plotter(pmesh)
+            plotter.create_plot(
+                pin.value_dict["variables_to_plot"],
+                pin.value_dict["labels"],
+                pin.value_dict["cmaps"],
+                pin.value_dict["stability_name"],
+                pin.value_dict["style_mode"],
+                iter,
+                t,
+            )
             #######################################
             print(f"{iter}       {t}       {dt}")
 
