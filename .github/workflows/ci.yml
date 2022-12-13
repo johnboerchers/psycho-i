@@ -29,7 +29,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: docs/_build
+          path: docs/_build/html
 
   format:
     runs-on: ubuntu-latest
