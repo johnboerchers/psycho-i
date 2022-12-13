@@ -8,7 +8,7 @@ from src.mesh import PsychoArray
 
 class Plotter:
     """Creates plots for the desired variables
-    
+
     Parameters
     ----------
     pmesh : PsychoArray

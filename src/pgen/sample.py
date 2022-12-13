@@ -27,7 +27,7 @@ def sampleProblemGenerator(
     pin : PsychoInput
         Contains the problem information stored in the PsychoInput
         object
-    
+
     pmesh : PsychoArray
         PsychoArray mesh which contains all of the current mesh information
         and the conserved variables Un

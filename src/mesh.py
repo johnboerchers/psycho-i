@@ -5,7 +5,6 @@
 ###################################################################
 
 import numpy as np
-import abc
 import sys
 
 sys.path.append("..")
@@ -20,7 +19,7 @@ class PsychoArray:
     pin : PsychoInput
         Contains the problem information stored in the PsychoInput
         object
-    
+
     dtype : dtype
         Specify the dtype for the conserved variables to be stored
         in the PyschoArray
@@ -50,8 +49,9 @@ class PsychoArray:
 
     Un : ndarray[dtype]
         Conserved variables
-    
+
     """
+
     def __init__(self, pin: PsychoInput, dtype: np.dtype) -> None:
 
         self.nvar = pin.value_dict["nvar"]
@@ -73,14 +73,14 @@ class PsychoArray:
 
     def enforce_bcs(self, pin: PsychoInput) -> None:
         """Implements the desired boundary conditions
-        
-        Will enforce the boundary conditions set in the PsychoInput class
-        on the conserved variables, Un.
 
-    pin : PsychoInput
-        Contains the problem information stored in the PsychoInput
-        object
-        
+            Will enforce the boundary conditions set in the PsychoInput class
+            on the conserved variables, Un.
+
+        pin : PsychoInput
+            Contains the problem information stored in the PsychoInput
+            object
+
         """
 
         # Left boundary

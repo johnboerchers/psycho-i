@@ -22,7 +22,7 @@ jobs:
         uses: actions/configure-pages@v2
 
       - uses: actions/checkout@v3
-      
+
       - name: build output
         run: pipx run nox -s docs
 
@@ -45,7 +45,7 @@ jobs:
 
       - name: Run pre-commit
         run: pre-commit run -a
-        
+
   deploy:
     needs:
       - docs
@@ -77,4 +77,3 @@ jobs:
 
       - name: Test package
         run: nox -s tests
-

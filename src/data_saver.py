@@ -7,7 +7,7 @@ sys.path.append("../..")
 import src.mesh
 import src.input
 from src.tools import get_primitive_variables_2d
-import numpy as np
+
 
 class PsychoOutput:
     """Class for producing the desired output
@@ -33,29 +33,26 @@ class PsychoOutput:
         """
         This function is called in `psycho.py` and sets the data preferences
         specified in the problem input (pin).
-        
+
         Parameters
         ----------
         pin : PsychoInput
             Contains the problem information stored in the PsychoInput
             object
-        
+
         """
 
         # Get output variables as a list
         self.variables = pin.value_dict["output_variables"]
-    
 
         # Get output frequency
         self.frequency = pin.value_dict["output_frequency"]
-    
 
         # Get output file type
         self.file_type = pin.value_dict["data_file_type"]
 
-
         file_type_check = 0
-        
+
         if "txt" in self.file_type:
             self.density_file = open("density.txt", "w")
             self.xvelocity_file = open("x-velocity.txt", "w")
@@ -87,15 +84,16 @@ class PsychoOutput:
         if "numpy.save" in self.file_type:
             self.density_file = open("density.npy", "w")
             self.xvelocity_file = open("x-velocity.npy", "w")
-            self.yvelocity_file = open("y-velocity.npy", "w")   
+            self.yvelocity_file = open("y-velocity.npy", "w")
             self.pressure_file = open("pressure.npy", "w")
             file_type_check = 1
-        
-        if file_type_check==0:
-            raise ValueError("No output file type specified in input.")
-    
 
-    def save_data(self, pmesh: src.mesh.PsychoArray, t: float, tmax: float, gamma: float) -> None:
+        if file_type_check == 0:
+            raise ValueError("No output file type specified in input.")
+
+    def save_data(
+        self, pmesh: src.mesh.PsychoArray, t: float, tmax: float, gamma: float
+    ) -> None:
         """Saves the data to to the desired format
 
         Parameters
@@ -112,59 +110,56 @@ class PsychoOutput:
 
         gamma : float
             Specific heat ratio
-        
+
         """
-        rho, u, v, p = get_primitive_variables_2d(pmesh,gamma)
-    
+        rho, u, v, p = get_primitive_variables_2d(pmesh, gamma)
+
         var_check = 0
         if "x-velocity" in self.variables:
-            
-            for j in reversed(range(u.shape[0]-4)):
-                for i in range(u.shape[1]-4):
-                    self.xvelocity_file.write(str(u[i+2][j+2]))
-                    self.xvelocity_file.write(' ')
-                self.xvelocity_file.write('\n')
-            
+
+            for j in reversed(range(u.shape[0] - 4)):
+                for i in range(u.shape[1] - 4):
+                    self.xvelocity_file.write(str(u[i + 2][j + 2]))
+                    self.xvelocity_file.write(" ")
+                self.xvelocity_file.write("\n")
+
             var_check = 1
 
-        if "y-velocity" in self.variables:   
+        if "y-velocity" in self.variables:
 
-            for j in reversed(range(v.shape[0]-4)):
-                for i in range(v.shape[1]-4):
-                    self.yvelocity_file.write(str(v[i+2][j+2]))
-                    self.yvelocity_file.write(' ')
-                self.yvelocity_file.write('\n')
-            
+            for j in reversed(range(v.shape[0] - 4)):
+                for i in range(v.shape[1] - 4):
+                    self.yvelocity_file.write(str(v[i + 2][j + 2]))
+                    self.yvelocity_file.write(" ")
+                self.yvelocity_file.write("\n")
+
             var_check = 1
-            
+
         if "density" in self.variables:
 
-            for j in reversed(range(rho.shape[0]-4)):
-                for i in range(rho.shape[1]-4):
-                    self.density_file.write(str(rho[i+2][j+2]))
-                    self.density_file.write(' ')
-                self.density_file.write('\n')
-            
+            for j in reversed(range(rho.shape[0] - 4)):
+                for i in range(rho.shape[1] - 4):
+                    self.density_file.write(str(rho[i + 2][j + 2]))
+                    self.density_file.write(" ")
+                self.density_file.write("\n")
+
             var_check = 1
 
         if "pressure" in self.variables:
 
-            for j in reversed(range(p.shape[0]-4)):
-                for i in range(p.shape[1]-4):
-                    self.pressure_file.write(str(p[i+2][j+2]))
-                    self.pressure_file.write(' ')
-                self.pressure_file.write('\n')
+            for j in reversed(range(p.shape[0] - 4)):
+                for i in range(p.shape[1] - 4):
+                    self.pressure_file.write(str(p[i + 2][j + 2]))
+                    self.pressure_file.write(" ")
+                self.pressure_file.write("\n")
 
             var_check = 1
 
-        
-        if (var_check==0):
+        if var_check == 0:
             raise ValueError("No output variables specified in input.")
 
-        if (t>=tmax):
+        if t >= tmax:
             self.density_file.close()
             self.xvelocity_file.close()
             self.yvelocity_file.close()
             self.pressure_file.close()
-
-  

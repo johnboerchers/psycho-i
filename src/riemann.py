@@ -3,7 +3,7 @@ import sys
 sys.path.append("..")
 
 import numpy as np
-from src.tools import get_fluxes_1d, get_fluxes_2d
+from src.tools import get_fluxes_1d
 from numba import njit
 
 
@@ -25,7 +25,7 @@ def solve_riemann(
     gamma : float
         Specific heat ratio
     direction : str
-        Specify the 'x' or 'y' direction 
+        Specify the 'x' or 'y' direction
 
     Returns
     -------
@@ -37,7 +37,7 @@ def solve_riemann(
     References
     -----------
     [1] Toro, E. F. (2011). Riemann solvers and Numerical Methods for fluid dynamics:
-    A practical introduction. Springer. 
+    A practical introduction. Springer.
 
     """
 
@@ -158,7 +158,9 @@ def solve_riemann(
                 )
 
             # This is from Toro
-            S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
+            S_c = (
+                p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)
+            ) / (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
 
             # Simpler assumption
             # S_c = ustar

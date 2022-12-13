@@ -53,4 +53,3 @@ labels = [\rho,u,v,e_t]
 cmaps = [jet,ocean,ocean,hot]
 stability_name = Kelvin-Helmholtz Instability
 style_mode = False
-

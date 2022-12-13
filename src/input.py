@@ -23,6 +23,7 @@ class PsychoInput:
         information (after parsing the input file)
 
     """
+
     def __init__(self, input_fname: str):
 
         self.input_fname = input_fname
@@ -32,10 +33,10 @@ class PsychoInput:
 
     def parse_input_file(self) -> None:
         """Parses and stores information from input file
-        
+
         Loops through parameter file and stores values from file
         to be used in problem generator
-        
+
         """
 
         with open(self.input_fname) as f:
@@ -69,12 +70,12 @@ class PsychoInput:
                     elif (
                         key == "output_variables"
                         or key == "variables_to_plot"
-                        or key == 'labels'
+                        or key == "labels"
                         or key == "cmaps"
                     ):
                         val = val.strip("[]")
                         self.value_dict[key] = [str(var) for var in val.split(",")]
-                    elif (key == "style_mode"):
+                    elif key == "style_mode":
                         self.value_dict[key] = eval(val)
                     else:
                         self.value_dict[key] = int(val)
