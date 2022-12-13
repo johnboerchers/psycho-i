@@ -51,7 +51,8 @@ if __name__ == "__main__":
     tmax = float(pin.value_dict["tmax"])
     cfl = float(pin.value_dict["CFL"])
     gamma = float(pin.value_dict["gamma"])
-    print_freq = float(pin.value_dict["output_frequency"])
+
+    print_freq = float(pin.value_dict['output_frequency'])
 
     # Initialize scratch arrays for intermediate calculations
     nx1 = pin.value_dict["nx1"]
@@ -161,7 +162,7 @@ if __name__ == "__main__":
 
         # Save Data
         if iter % print_freq == 0:
-            pout.save_data(pmesh.Un, t, tmax, gamma)
+            pout.save_data(pmesh.Un,t,tmax,gamma,iter)
 
         if iter % print_freq == 0:
             #######################################

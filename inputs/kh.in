@@ -36,13 +36,14 @@ top_bc    = periodic
 bottom_bc = periodic
 
 # Desired variables to output inputted as list, options include: x-velocity, y-velocity, density, pressure
+# Note that time is always an output variable
 output_variables = ["x-velocity", "y-velocity", "density", "pressure"]
 
 # Desired output frequency (number of timesteps before data is saved) inputted as a float
 output_frequency = 50
 
-# Desired data file type inputted as a string, options include: txt, csv, pickle, hdf5, numpy.save
-data_file_type = txt
+# Desired data file type inputted as a string, options include: txt, csv, hdf5
+data_file_type = hdf5
 
 #  ----------------------------------------- Plotting -----------------------------------------------
 # Pick the variables to be plotted and do not put a space between them in 'variables to plot,' 'labels,' or
