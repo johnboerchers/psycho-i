@@ -53,7 +53,7 @@ def get_primitive_variables_2d(Un: np.ndarray, gamma: float):
     Parameters
     ----------
     Un : ndarray[float]
-        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
+        Conserved variables
     gamma : float
         Specific heat ratio
     
@@ -90,7 +90,7 @@ def get_fluxes_1d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
     Parameters
     ----------
     Un : ndarray[float]
-        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
+        Conserved variables
     gamma : float
         Specific heat ratio
     direction : str
@@ -133,7 +133,7 @@ def get_fluxes_2d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
     Parameters
     ----------
     Un : ndarray[float]
-        Conserved variables: :math: '\\rho, \\rho * u, \\rho * v, \\rho * e_t',
+        Conserved variables
     gamma : float
         Specific heat ratio
     direction : str
