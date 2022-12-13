@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def get_unlimited_slopes(
     U_i_j: np.ndarray,
     U_ip1_j: np.ndarray,
@@ -36,10 +37,11 @@ def get_unlimited_slopes(
     delta_jmoh = U_i_j - U_i_jm1
     delta_jpoh = U_i_jp1 - U_i_j
 
-    delta_i = 0.5 * (1. + w) * delta_imoh + 0.5 * (1. - w) * delta_ipoh
-    delta_j = 0.5 * (1. + w) * delta_jmoh + 0.5 * (1. - w) * delta_jpoh
+    delta_i = 0.5 * (1.0 + w) * delta_imoh + 0.5 * (1.0 - w) * delta_ipoh
+    delta_j = 0.5 * (1.0 + w) * delta_jmoh + 0.5 * (1.0 - w) * delta_jpoh
 
     return delta_i, delta_j
+
 
 def get_limited_slopes(
     U_i_j: np.ndarray,
@@ -77,7 +79,7 @@ def get_limited_slopes(
     References
     ----------
     [1] Toro, E. F. (2011). Riemann solvers and Numerical Methods for fluid dynamics:
-    A practical introduction. Springer. 
+    A practical introduction. Springer.
 
     """
     delta_imoh = U_i_j - U_im1_j

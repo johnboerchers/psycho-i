@@ -6,10 +6,8 @@ sys.path.append("../..")
 
 import src.mesh
 import src.input
-from src.eos import e_EOS, p_EOS
+from src.eos import e_EOS
 import numpy as np
-
-import matplotlib.pyplot as plt
 
 
 def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) -> None:
@@ -25,7 +23,7 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
     pin : PsychoInput
         Contains the problem information stored in the PsychoInput
         object
-    
+
     pmesh : PsychoArray
         PsychoArray mesh which contains all of the current mesh information
         and the conserved variables Un
@@ -34,10 +32,14 @@ def ProblemGenerator(pin: src.input.PsychoInput, pmesh: src.mesh.PsychoArray) ->
 
     # Get x values and y values
     x = np.linspace(
-        pin.value_dict["x1min"], pin.value_dict["x1max"], pin.value_dict["nx1"] + 2 * pin.value_dict["ng"]
+        pin.value_dict["x1min"],
+        pin.value_dict["x1max"],
+        pin.value_dict["nx1"] + 2 * pin.value_dict["ng"],
     )
     y = np.linspace(
-        pin.value_dict["x2min"], pin.value_dict["x2max"], pin.value_dict["nx2"] + 2 * pin.value_dict["ng"]
+        pin.value_dict["x2min"],
+        pin.value_dict["x2max"],
+        pin.value_dict["nx2"] + 2 * pin.value_dict["ng"],
     )
 
     # make empty pressure array for storage

@@ -3,7 +3,7 @@ import sys
 
 sys.path.append("..")
 from src.mesh import PsychoArray
-from src.eos import e_EOS, p_EOS
+from src.eos import p_EOS
 from numba import njit
 
 
@@ -20,7 +20,7 @@ def get_primitive_variables_1d(Un: np.ndarray, gamma: float):
         Conserved variables
     gamma : float
         Specific heat ratio
-    
+
     Returns
     -------
     rho : float
@@ -56,7 +56,7 @@ def get_primitive_variables_2d(Un: np.ndarray, gamma: float):
         Conserved variables
     gamma : float
         Specific heat ratio
-    
+
     Returns
     -------
     rho : ndarray[float]
@@ -94,8 +94,8 @@ def get_fluxes_1d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
     gamma : float
         Specific heat ratio
     direction : str
-        Specify the 'x' or 'y' direction 
-    
+        Specify the 'x' or 'y' direction
+
     Returns
     -------
     F : ndarray[float]
@@ -137,8 +137,8 @@ def get_fluxes_2d(Un: np.ndarray, gamma: float, direction: str) -> np.ndarray:
     gamma : float
         Specific heat ratio
     direction : str
-        Specify the 'x' or 'y' direction 
-    
+        Specify the 'x' or 'y' direction
+
     Returns
     -------
     F : ndarray[float]
@@ -180,7 +180,7 @@ def calculate_timestep(pmesh: PsychoArray, cfl: float, gamma: float) -> float:
         choosing the timestep
     gamma: float
         Specific heat ratio
-    
+
 
     Returns
     -------

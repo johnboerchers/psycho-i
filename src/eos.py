@@ -21,7 +21,7 @@ def p_EOS(
     ----------
     rho : Union[float, ndarray]
         Density
-    
+
     e : Union[float, ndarray]
         Internal energy
 
@@ -49,7 +49,7 @@ def e_EOS(
     ----------
     rho : Union[float, ndarray]
         Density
-    
+
     p : Union[float, ndarray]
         Pressure
 

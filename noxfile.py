@@ -9,6 +9,7 @@ def tests(session: nox.Session) -> None:
     session.install(".[test]")
     session.run("pytest")
 
+
 @nox.session
 def docs(session: nox.Session) -> None:
     """
@@ -18,6 +19,7 @@ def docs(session: nox.Session) -> None:
     session.install(".[docs]")
     session.chdir("docs")
     session.run("sphinx-build", "-M", "html", ".", "_build")
+
 
 @nox.session
 def serve(session: nox.Session) -> None:
