@@ -92,7 +92,7 @@ def get_limited_slopes(
 
     beta : float
         Weight value determining type of limiter.
-        Default value is 1.0 which represents a 
+        Default value is 1.0 which represents a
         minmod limiter
 
     Returns
