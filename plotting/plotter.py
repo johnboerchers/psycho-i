@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+import os
 
 sys.path.append("..")
 from src.mesh import PsychoArray
@@ -69,6 +70,14 @@ class Plotter:
         self.x2 = np.arange(pmesh.x2min, pmesh.x2max, pmesh.dx2)
         self.x1_plot, self.x2_plot = np.meshgrid(self.x1, self.x2)
 
+    def check_path_exists(
+        self,
+    ) -> None:
+        """Checks output path and creates it if necessary"""
+
+        if not os.path.exists("./outputs/plots"):
+            os.makedirs("./output/plots")
+
     def create_plot(
         self,
         variables_to_plot: list[str],
@@ -109,6 +118,9 @@ class Plotter:
             raise Exception(
                 "Please input only valid variables \n Valid variables are: rho, u, v, et"
             )
+
+        # Check if output directory exists
+        self.check_path_exists()
 
         # Create plots for each variable, if more than 3 plots then add another row
         num_of_variables = len(variables_to_plot)
