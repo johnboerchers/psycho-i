@@ -41,7 +41,7 @@ def test_psycho_pgen():
 
 def test_plotter_directory():
 
-    # Remove directory if it exists to test the 
+    # Remove directory if it exists to test the
     # plotter's ability to create it
     if os.path.exists("./output/plots"):
         os.removedirs("./outputs/plots")
@@ -60,5 +60,3 @@ def test_plotter_directory():
     test_plotter.check_path_exists()
 
     assert os.path.exists("./output/plots")
-
-    
