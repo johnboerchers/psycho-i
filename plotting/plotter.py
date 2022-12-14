@@ -7,8 +7,52 @@ from src.mesh import PsychoArray
 
 
 class Plotter:
-    """Extends Matplotlib for plotting output during the
-    run"""
+    """Creates plots for the desired variables
+
+    Parameters
+    ----------
+    pmesh : PsychoArray
+        PsychoArray mesh which contains all of the current mesh information
+        and the conserved variables Un
+
+    Attributes
+    ----------
+    ng : int
+        Number of ghost cells
+
+    rho : ndarray[float]
+        Array containing the rho (density) value at each point in space at
+        a given time
+
+    u : ndarray[float]
+        Array containing the u (horizontal velocity) value at each
+        point in space at a given time
+
+    v : ndarray[float]
+        Array continaing the v (vertical velocity) value at each point
+        in space at a given time
+
+    et : ndarray[float]
+        Array containing the et (total energy) value at each point in space
+        at a given time
+
+    primitives: dict
+        Dictionary containing each primitive (rho, u, v, et) with a corresponding
+        key
+
+    x1 : ndarray[float]
+        Vector containing the x1 values
+
+    x2 : ndarray[float]
+        Vector containing the x2 values
+
+    x1_plot : ndarray[float]
+        Array of x1 values after using meshrid for plotting
+
+    x2_plot : ndarray[float]
+        Array of x2 values after using meshgrid for plotting
+
+    """
 
     def __init__(self, pmesh: PsychoArray):
 
@@ -35,6 +79,28 @@ class Plotter:
         iter: int,
         time: float,
     ) -> None:
+        """Creates desired plots for provided input variables at a given time
+
+        Parameters
+        ----------
+        variables_to_plot : list[str]
+            A list of strings containing the variables to be
+            plotted
+        labels : list[str]
+            The corresponding labels for the variables (can be in LaTeX form)
+        cmaps : list[str]
+            The desired cmaps for each variable - entered in the corresponding
+            order
+        stability_name : str
+            The name of the instability
+        style_mode : bool
+            Style_mode will turn off all extra text and display only the
+            desired variable in full in the figure
+        iter : int
+            The current iteration
+        time : float
+            The current time
+        """
 
         # Check to make sure desired output is one that exists
         if not any(
@@ -163,8 +229,8 @@ class Plotter:
         if style_mode:
             fig.tight_layout(pad=0)
             fig.set_facecolor("dimgray")
-            plt.savefig("./output/plots/" + f"{striter}.png")
-        plt.savefig("./output/plots/" + f"{striter}.png")
+            plt.savefig("output/plots/" + f"{striter}.png")
+        plt.savefig("output/plots/" + f"{striter}.png")
         plt.close()
 
         return

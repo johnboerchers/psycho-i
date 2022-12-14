@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def get_unlimited_slopes(
     U_i_j: np.ndarray,
     U_ip1_j: np.ndarray,
@@ -8,15 +9,39 @@ def get_unlimited_slopes(
     U_i_jm1: np.ndarray,
     w: float,
 ):
+    """Find the slopes without a limiter
+
+    Parameters
+    ----------
+    U_i_j : ndarray[float]
+
+    U_ip1_j : ndarray[float]
+
+    U_im1_j : ndarray[float]
+
+    U_i_jp1 : ndarray[float]
+
+    U_i_jm1 : ndarray[float]
+
+    w : float
+
+    Returns
+    -------
+    delta_i : ndarray[float]
+
+    delta_j : ndarray[float]
+
+    """
     delta_imoh = U_i_j - U_im1_j
     delta_ipoh = U_ip1_j - U_i_j
     delta_jmoh = U_i_j - U_i_jm1
     delta_jpoh = U_i_jp1 - U_i_j
 
-    delta_i = 0.5 * (1. + w) * delta_imoh + 0.5 * (1. - w) * delta_ipoh
-    delta_j = 0.5 * (1. + w) * delta_jmoh + 0.5 * (1. - w) * delta_jpoh
+    delta_i = 0.5 * (1.0 + w) * delta_imoh + 0.5 * (1.0 - w) * delta_ipoh
+    delta_j = 0.5 * (1.0 + w) * delta_jmoh + 0.5 * (1.0 - w) * delta_jpoh
 
     return delta_i, delta_j
+
 
 def get_limited_slopes(
     U_i_j: np.ndarray,
@@ -26,10 +51,36 @@ def get_limited_slopes(
     U_i_jm1: np.ndarray,
     beta: float,
 ):
-    """
-    NEED TO ADD DOCUMENTATION HERE
+    """Minmod slope limiter to handle discontinuities
 
-    based on page 508 minmod slope limiter in Toro book
+    Minimod slope limiter based on page 508 in [1], necessary
+    for handling discontinuities
+
+    Parameters
+    ----------
+    U_i_j : ndarray[float]
+
+    U_ip1_j : ndarray[float]
+
+    U_im1_j : ndarray[float]
+
+    U_i_jp1 : ndarray[float]
+
+    U_i_jm1 : ndarray[float]
+
+    beta : float
+
+    Returns
+    -------
+    delta_i : ndarray[float]
+
+    delta_j : ndarray[float]
+
+    References
+    ----------
+    [1] Toro, E. F. (2011). Riemann solvers and Numerical Methods for fluid dynamics:
+    A practical introduction. Springer.
+
     """
     delta_imoh = U_i_j - U_im1_j
     delta_ipoh = U_ip1_j - U_i_j

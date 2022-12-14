@@ -5,7 +5,6 @@
 ###################################################################
 
 import numpy as np
-import abc
 import sys
 
 sys.path.append("..")
@@ -13,6 +12,46 @@ from src.input import PsychoInput
 
 
 class PsychoArray:
+    """Class which contains the mesh and conserved variables
+
+    Parameters
+    ----------
+    pin : PsychoInput
+        Contains the problem information stored in the PsychoInput
+        object
+
+    dtype : dtype
+        Specify the dtype for the conserved variables to be stored
+        in the PyschoArray
+
+    Attributes
+    ----------
+    nvar : int
+        Number of variables to be stored
+
+    nx1 : int
+        Number of cells in the x1 direction
+
+    nx2 : int
+        Number of cells in the x2 direction
+
+    ng : int
+        Number of ghost cells
+
+    x1min, x2min : float
+        Min x1 and x2 values
+
+    x1max, x2max : float
+        Max x1 and x2 values
+
+    dx1, dx2 : float
+        Step size in the x1 and x2 directions
+
+    Un : ndarray[dtype]
+        Conserved variables
+
+    """
+
     def __init__(self, pin: PsychoInput, dtype: np.dtype) -> None:
 
         self.nvar = pin.value_dict["nvar"]
@@ -33,8 +72,15 @@ class PsychoArray:
         )
 
     def enforce_bcs(self, pin: PsychoInput) -> None:
-        """
-        NEED TO ADD DOCUMENTATION HERE
+        """Implements the desired boundary conditions
+
+            Will enforce the boundary conditions set in the PsychoInput class
+            on the conserved variables, Un.
+
+        pin : PsychoInput
+            Contains the problem information stored in the PsychoInput
+            object
+
         """
 
         # Left boundary
@@ -94,8 +140,26 @@ class PsychoArray:
 
 
 def get_interm_array(nvar: int, nx1: int, nx2: int, dtype: np.dtype) -> np.ndarray:
-    """
-    Generates empty scratch array for intermediate calculations
+    """Generates empty scratch array for intermediate calculations
+
+    Parameters
+    ----------
+    nvar : int
+        Number of variables
+
+    nx1 : int
+        Number of cells in the x1 direction
+
+    nx2 : int
+        Number of cells in the x2 direction
+
+    dtype : dtype
+        Type for the values to have in the scratch array
+
+    Returns
+    -------
+    ndarray :
+        Scratch array with provided dtype
     """
     if nvar == 1:
         return np.zeros((nx1, nx2), dtype=dtype)

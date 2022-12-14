@@ -3,7 +3,7 @@ import sys
 sys.path.append("..")
 
 import numpy as np
-from src.tools import get_fluxes_1d, get_fluxes_2d
+from src.tools import get_fluxes_1d
 from numba import njit
 
 
@@ -11,9 +11,34 @@ from numba import njit
 def solve_riemann(
     U_l: np.ndarray, U_r: np.ndarray, gamma: float, direction: str
 ) -> np.ndarray:
-    """
-    Solves the Riemann problem using a HLLC Riemann solver (outlined in Toro)
-    adapted from page 322
+    """Solve the Riemann problem
+
+    Solves the Riemann problem using a HLLC Riemann solver - outlined in Toro
+    adapted from page 322 (see [1])
+
+    Parameters
+    ----------
+    U_l : ndarray[float]
+        Conserved variables at the left cell face
+    U_r : ndarray[float]
+        Conserved variables at the right cell face
+    gamma : float
+        Specific heat ratio
+    direction : str
+        Specify the 'x' or 'y' direction
+
+    Returns
+    -------
+    F : ndarray[float]
+        The flux in the specified direction returned from the
+        Riemann problem
+
+
+    References
+    -----------
+    [1] Toro, E. F. (2011). Riemann solvers and Numerical Methods for fluid dynamics:
+    A practical introduction. Springer.
+
     """
 
     U_state = np.zeros(4)
@@ -133,7 +158,9 @@ def solve_riemann(
                 )
 
             # This is from Toro
-            S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
+            S_c = (
+                p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)
+            ) / (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
 
             # Simpler assumption
             # S_c = ustar
