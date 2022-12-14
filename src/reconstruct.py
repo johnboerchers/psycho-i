@@ -9,27 +9,44 @@ def get_unlimited_slopes(
     U_i_jm1: np.ndarray,
     w: float,
 ):
-    """Find the slopes without a limiter
+    """
+    Find the slopes between grid cells without a limiter.
+    Can potentially lead to oscillations if there are discontinuities
+    present in flow.
 
     Parameters
     ----------
     U_i_j : ndarray[float]
+        Values of U not shifted by any index
 
     U_ip1_j : ndarray[float]
+        Values of U shifted by i+1
 
     U_im1_j : ndarray[float]
+        Values of U shifted by i-1
 
     U_i_jp1 : ndarray[float]
+        Values of U shifted by j+1
 
     U_i_jm1 : ndarray[float]
+        Values of U shifted by j-1
 
     w : float
+        Weight parameter determining whether slopes
+        are centered or biased in a particular direction
 
     Returns
     -------
     delta_i : ndarray[float]
+        Slope of the conserved variables in the x-direction
 
     delta_j : ndarray[float]
+        Slope of the conserved variables in the y-direction
+
+    References
+    ----------
+    [1] Toro, E. F. (2011). Riemann solvers and Numerical Methods for fluid dynamics:
+    A practical introduction. Springer.
 
     """
     delta_imoh = U_i_j - U_im1_j
@@ -59,22 +76,32 @@ def get_limited_slopes(
     Parameters
     ----------
     U_i_j : ndarray[float]
+        Values of U not shifted by any index
 
     U_ip1_j : ndarray[float]
+        Values of U shifted by i+1
 
     U_im1_j : ndarray[float]
+        Values of U shifted by i-1
 
     U_i_jp1 : ndarray[float]
+        Values of U shifted by j+1
 
     U_i_jm1 : ndarray[float]
+        Values of U shifted by j-1
 
     beta : float
+        Weight value determining type of limiter.
+        Default value is 1.0 which represents a
+        minmod limiter
 
     Returns
     -------
     delta_i : ndarray[float]
+        Slope of the conserved variables in the x-direction
 
     delta_j : ndarray[float]
+        Slope of the conserved variables in the y-direction
 
     References
     ----------
