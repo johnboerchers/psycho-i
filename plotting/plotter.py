@@ -75,7 +75,7 @@ class Plotter:
     ) -> None:
         """Checks output path and creates it if necessary"""
 
-        if not os.path.exists("./outputs/plots"):
+        if not os.path.exists("./output/plots"):
             os.makedirs("./output/plots")
 
     def create_plot(
