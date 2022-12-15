@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+import os
 
 sys.path.append("..")
 
@@ -413,8 +414,49 @@ def test_psycho_data_saved_to_file():
             assert
 
 
+def test_plotter_directory():
 
+    # Remove directory if it exists to test the
+    # plotter's ability to create it
+    if os.path.exists("./output/plots"):
+        os.removedirs("./outputs/plots")
 
+    assert not os.path.exists("./output/plots")
+
+    pin = PsychoInput(f"inputs/sample.in")
+
+    pin.parse_input_file()
+
+    pmesh = PsychoArray(pin, np.float64)
+
+    sampleProblemGenerator(pin=pin, pmesh=pmesh)
+
+    test_plotter = Plotter(pmesh)
+    test_plotter.check_path_exists()
+
+    assert os.path.exists("./output/plots")
+
+def test_plotter_directory():
+
+    # Remove directory if it exists to test the
+    # plotter's ability to create it
+    if os.path.exists("./output/plots"):
+        os.removedirs("./outputs/plots")
+
+    assert not os.path.exists("./output/plots")
+
+    pin = PsychoInput(f"inputs/sample.in")
+
+    pin.parse_input_file()
+
+    pmesh = PsychoArray(pin, np.float64)
+
+    sampleProblemGenerator(pin=pin, pmesh=pmesh)
+
+    test_plotter = Plotter(pmesh)
+    test_plotter.check_path_exists()
+
+    assert os.path.exists("./output/plots")
 
 #def test_psycho_plotting():
 # check array dimensions
