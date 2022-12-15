@@ -69,6 +69,16 @@ class Plotter:
         self.x2 = np.arange(pmesh.x2min, pmesh.x2max, pmesh.dx2)
         self.x1_plot, self.x2_plot = np.meshgrid(self.x1, self.x2)
 
+
+    def check_path_exists(
+        self,
+    ) -> None:
+        """Checks output path and creates it if necessary"""
+
+        if not os.path.exists("./output/plots"):
+            os.makedirs("./output/plots")
+
+
     def create_plot(
         self,
         variables_to_plot: list[str],
