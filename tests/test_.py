@@ -1,7 +1,6 @@
 import sys
 import numpy as np
 import os
-import pytest
 
 sys.path.append("..")
 
@@ -79,7 +78,7 @@ def test_plotter_init():
     sampleProblemGenerator(pin=pin, pmesh=pmesh)
 
     test_plotter = Plotter(pmesh)
-    
+
     assert np.ceil(test_plotter.x1[-1]) == pmesh.x1max
     assert np.ceil(test_plotter.x2[-1]) == pmesh.x2max
 
@@ -88,17 +87,28 @@ def test_plotter_init():
     randint_x2 = np.random.randint(0, len(test_plotter.x2))
 
     assert test_plotter.ng == pmesh.ng
-    assert test_plotter.rho[randint_x1, randint_x2] == pmesh.Un[0, randint_x1, randint_x2]
-    assert test_plotter.rho[randint_x1, randint_x2] * test_plotter.u[randint_x1, randint_x2] \
+    assert (
+        test_plotter.rho[randint_x1, randint_x2] == pmesh.Un[0, randint_x1, randint_x2]
+    )
+    assert (
+        test_plotter.rho[randint_x1, randint_x2]
+        * test_plotter.u[randint_x1, randint_x2]
         == pmesh.Un[1, randint_x1, randint_x2]
-    assert test_plotter.rho[randint_x1, randint_x2] * test_plotter.v[randint_x1, randint_x2] \
+    )
+    assert (
+        test_plotter.rho[randint_x1, randint_x2]
+        * test_plotter.v[randint_x1, randint_x2]
         == pmesh.Un[2, randint_x1, randint_x2]
-    assert test_plotter.rho[randint_x1, randint_x2] * test_plotter.et[randint_x1, randint_x2] \
+    )
+    assert (
+        test_plotter.rho[randint_x1, randint_x2]
+        * test_plotter.et[randint_x1, randint_x2]
         == pmesh.Un[3, randint_x1, randint_x2]
+    )
 
 
 def test_plotter_figure():
-    
+
     # Initialize plotter with sample data and
     # verify it generates a figure
     pin = PsychoInput(f"inputs/sample.in")
@@ -114,12 +124,12 @@ def test_plotter_figure():
     test_plotter.create_plot(
         ["rho"],
         ["test"],
-        ["magma"], # the coolest cmap by the way
-        stability_name= "test",
+        ["magma"],  # the coolest cmap by the way
+        stability_name="test",
         style_mode=True,
         iter=1,
-        time=0
-        )
+        time=0,
+    )
 
     assert os.path.exists("./output/plots/0001.png")
 
