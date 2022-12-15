@@ -65,7 +65,7 @@ def test_psycho_pgen():
     nx2 = pin.value_dict["nx2"]
     ng = pin.value_dict["ng"]
     assert pmesh.Un.ndim == (nx1,nx2)
-    
+
     assert pmesh.Un[3, :, :] >= 0 # total energy is positive
 
 
@@ -85,7 +85,7 @@ def test_psycho_eos():
     correct_estate = np.empty((nx1,nx2),dtype=float)
     pdiff = np.empty((nx1,nx2),dtype=float)
     ediff = np.empty((nx1,nx2),dtype=float)
-    
+
     rho = 100.0*np.random.random_sample(size=(nx1,nx2))
     e = 100.0*np.random.random_sample(size=(nx1,nx2))
     p = 100.0*np.random.random_sample(size=(nx1,nx2))
@@ -119,9 +119,9 @@ def test_psycho_mesh():
     """
     pin = PsychoInput(f"inputs/kh.in")
     pmesh = PsychoArray(pin, np.float64)
-    
+
     assert pmesh.Un.ndim == (pmesh.nvar, pmesh.nx1 + 2 * pmesh.ng, pmesh.nx2 + 2 * pmesh.ng)
-    
+
     interm = np.array()
     interm = pmesh.get_interm_array(pmesh.nvar, pmesh.nx1, pmesh.nx2)
     if (pmesh.nvar==1):
@@ -168,7 +168,7 @@ def test_psycho_reconstruct():
 
 
 def test_psycho_1d_variables():
-    """Tests that array dimensions in get_primitive_variables_1d() in tools.py are correct. 
+    """Tests that array dimensions in get_primitive_variables_1d() in tools.py are correct.
 
     """
     pin = PsychoInput(f"inputs/kh.in")
@@ -189,7 +189,7 @@ def test_psycho_1d_variables():
 
 
 def test_psycho_2d_variables():
-    """Tests that array dimensions in get_primitive_variables_2d() in tools.py are correct. 
+    """Tests that array dimensions in get_primitive_variables_2d() in tools.py are correct.
 
     """
     pin = PsychoInput(f"inputs/kh.in")
@@ -211,7 +211,7 @@ def test_psycho_2d_variables():
 
 
 def test_psycho_1d_fluxes():
-    """Tests that array dimensions in get_fluxes_1d() in tools.py are correct. 
+    """Tests that array dimensions in get_fluxes_1d() in tools.py are correct.
 
     """
     pin = PsychoInput(f"inputs/kh.in")
@@ -232,7 +232,7 @@ def test_psycho_1d_fluxes():
 
 
 def test_psycho_2d_fluxes():
-    """Tests that array dimensions in get_fluxes_2d() in tools.py are correct. 
+    """Tests that array dimensions in get_fluxes_2d() in tools.py are correct.
 
     """
 
@@ -254,7 +254,7 @@ def test_psycho_2d_fluxes():
 
 
 def test_calculate_timestep():
-    """Tests that array dimensions in calculate_timestep() in tools.py are correct. 
+    """Tests that array dimensions in calculate_timestep() in tools.py are correct.
 
     """
     pin = PsychoInput(f"inputs/kh.in")
@@ -272,7 +272,7 @@ def test_calculate_timestep():
 
 def test_psycho_data_file_existence():
     """Tests that correct data files exist.
-    array dimensions in psycho_data_saver.py are correct. 
+    array dimensions in psycho_data_saver.py are correct.
 
     """
     pin = PsychoInput(f"inputs/kh.in")
@@ -318,28 +318,28 @@ def test_psycho_data_file_existence():
             assert os.path.isfile('pressure.csv')
 
     if "hdf5" in pout.file_type:
-        
+
          assert os.path.isfile(f'iter_{file_name}.hdf5')
 
          if "x-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "y-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "density" in pout.variables:
 
-            assert 
+            assert
 
         if "pressure" in pout.variables:
 
-            assert 
+            assert
 
 
 def test_psycho_data_saved_to_file():
-    """Tests that array dimensions in psycho_data_saver.py are correct. 
+    """Tests that array dimensions in psycho_data_saver.py are correct.
 
     """
     pin = PsychoInput(f"inputs/kh.in")
@@ -356,61 +356,61 @@ def test_psycho_data_saved_to_file():
 
     rho, u, v, p = get_primitive_variables_2d(pmesh,gamma)
 
-    
+
     if "txt" in pout.file_type:
         if "x-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "y-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "density" in pout.variables:
 
-            assert 
+            assert
 
         if "pressure" in pout.variables:
 
-            assert 
+            assert
 
 
     if "csv" in pout.file_type:
         if "x-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "y-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "density" in pout.variables:
 
-            assert 
+            assert
 
         if "pressure" in pout.variables:
 
-            assert 
+            assert
 
     if "hdf5" in pout.file_type:
-        
+
          assert os.path.isfile(f'iter_{file_name}.hdf5')
 
          if "x-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "y-velocity" in pout.variables:
 
-            assert 
+            assert
 
         if "density" in pout.variables:
 
-            assert 
+            assert
 
         if "pressure" in pout.variables:
 
-            assert 
+            assert
 
 
 
@@ -419,4 +419,3 @@ def test_psycho_data_saved_to_file():
 #def test_psycho_plotting():
 # check array dimensions
 # not sure what other tests can be done for plotter...
-
