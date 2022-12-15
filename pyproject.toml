@@ -7,7 +7,7 @@ name = "psycho-i"
 description = 'Finite volume solver to investigate flow instabilities'
 version = "1.0.1"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 authors = [
   { name = "John Boerchers", email = "jb5027@princeton.edu" },
   { name = "Sydney Rzepka", email = "sr5286@princeton.edu" },
@@ -32,6 +32,7 @@ docs = [
     "myst_parser >=0.13",  # Markdown
     "sphinx >=4.0",
     "sphinx_copybutton",  # Easy code copy button
+    "h5py",
 ]
 
 [tool.pytest.ini_options]

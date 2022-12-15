@@ -24,6 +24,8 @@ Where `problem_name` is the name of the problem being ran, corresponding to the 
 
 The outputs from the simulation for plotting can be found in `outputs/plots`.
 
+Documentation for specifics about each of the functions present in the code can be found here: https://johnboerchers.github.io/psycho-i/index.html
+
 ## Implementing new problems
 
 In order to implement new problems, it is as simple as adding a problem generator file in `src/pgen` with the corresponding problem name, and adding an input file to the `inputs` directory. There are template/sample files available in those directories to assist in implementing a new problem.

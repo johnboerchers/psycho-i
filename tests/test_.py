@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import math
+import os
 
 sys.path.append("..")
 
@@ -13,8 +14,6 @@ from src.riemann import solve_riemann
 from src.tools import get_primitive_variables_1d, get_primitive_variables_2d, get_fluxes_1d, get_fluxes_2d
 from src.data_saver import PsychoOutput
 from plotting.plotter import Plotter
-
-
 
 
 def test_psycho_input():
@@ -264,3 +263,24 @@ def test_psycho_spatial_convergence():
 
 
 
+def test_plotter_directory():
+
+    # Remove directory if it exists to test the
+    # plotter's ability to create it
+    if os.path.exists("./output/plots"):
+        os.removedirs("./outputs/plots")
+
+    assert not os.path.exists("./output/plots")
+
+    pin = PsychoInput(f"inputs/sample.in")
+
+    pin.parse_input_file()
+
+    pmesh = PsychoArray(pin, np.float64)
+
+    sampleProblemGenerator(pin=pin, pmesh=pmesh)
+
+    test_plotter = Plotter(pmesh)
+    test_plotter.check_path_exists()
+
+    assert os.path.exists("./output/plots")
