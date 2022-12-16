@@ -4,10 +4,9 @@ import os
 
 sys.path.append("..")
 
-from numba import njit
 from src.input import PsychoInput
 from src.mesh import PsychoArray, get_interm_array
-from src.pgen import kh
+#from src.pgen import ProblemGenerator
 from src.eos import p_EOS,e_EOS
 from src.reconstruct import get_limited_slopes
 from src.tools import get_primitive_variables_1d, get_primitive_variables_2d, get_fluxes_1d, get_fluxes_2d, calculate_timestep
@@ -42,11 +41,14 @@ def test_psycho_input():
     assert pin.value_dict["top_bc"] == "periodic"
     assert pin.value_dict["bottom_bc"] == "periodic"
     assert pin.value_dict["output_frequency"] >= 1
+    assert pin.value_dict["nx1"] >= 64
+    assert pin.value_dict["nx2"] >= 64
+    assert pin.value_dict["nx1"] == pin.value_dict["nx2"]
 
 
 
 def test_psycho_pgen():
-    """Tests values or signs of values from the problekm generator
+    """Tests values or signs of values from the problem generator
 
     """
 
@@ -66,8 +68,11 @@ def test_psycho_pgen():
 
     nx1 = pin.value_dict["nx1"]
     nx2 = pin.value_dict["nx2"]
-    ng = pin.value_dict["ng"]
-    assert pmesh.Un.ndim == (nx1,nx2)
+    
+    #assert pmesh.Un.ndim == (nx1,nx2)
+    assert range(pmesh.Un.shape[0]) == 4
+    assert range(pmesh.Un.shape[1]) == nx1
+    assert range(pmesh.Un.shape[2]) == nx2
 
     assert pmesh.Un[3, :, :] >= 0 # total energy is positive
 
@@ -75,7 +80,7 @@ def test_psycho_pgen():
 def test_psycho_eos():
     """Tests eos.py by generating random inputs and compares the output of eos.py with a direct application of the equation of state equation
 
-#    """
+    """
 
     pin = PsychoInput(f"inputs/kh.in")
 
@@ -95,10 +100,10 @@ def test_psycho_eos():
 
     gamma = 1.4
     pstate = p_EOS(rho,e,gamma)
-    assert pstate[:][:] > 0.0
+    assert pstate > 0.0
 
     estate = e_EOS(rho,p,gamma)
-    assert estate[:][:] > 0.0
+    assert estate > 0.0
 
     tol = 0.001
     count = 0.0
@@ -133,10 +138,83 @@ def test_psycho_mesh():
         assert interm.ndim == (pmesh.nvar, pmesh.nx1, pmesh.nx2)
 
 
-def test_bc_enforced():
-    """Check boundary condition enforcement
+def test_left_bc_enforced():
+    """Check left side of domain boundary condition enforcement
 
     """
+
+    pin = PsychoInput(f"inputs/kh.in")
+
+    pin.parse_input_file()
+
+    ng = pin.value_dict["ng"]
+
+    pmesh = PsychoArray(pin, np.float64)
+
+
+    if pin.value_dict["left_bc"] == "transmissive":
+        assert pmesh.Un[:, : ng, :] == pmesh.Un[:, ng : 2 * ng, :]
+
+    elif pin.value_dict["left_bc"] == "periodic":
+        assert pmesh.Un[:, : ng, :] == pmesh.Un[:, -2 * ng : -ng, :]
+
+def test_right_bc_enforced():
+    """Check right side of domain boundary condition enforcement
+
+    """
+
+    pin = PsychoInput(f"inputs/kh.in")
+
+    pin.parse_input_file()
+
+    ng = pin.value_dict["ng"]
+
+    pmesh = PsychoArray(pin, np.float64)
+
+    if pin.value_dict["right_bc"] == "transmissive":
+        assert pmesh.Un[:, -ng :, :] == pmesh.Un[:, -2 * ng : -ng, :]
+
+    elif pin.value_dict["right_bc"] == "periodic":
+        assert pmesh.Un[:, -ng :, :] == pmesh.Un[:, ng : 2 * ng, :]
+
+def test_top_bc_enforced():
+    """Check top of domain boundary condition enforcement
+
+    """
+
+    pin = PsychoInput(f"inputs/kh.in")
+
+    pin.parse_input_file()
+
+    ng = pin.value_dict["ng"]
+
+    pmesh = PsychoArray(pin, np.float64)
+
+    if pin.value_dict["top_bc"] == "transmissive":
+        assert pmesh.Un[:, :, : ng] == pmesh.Un[:, :, ng : 2 * ng]
+
+    elif pin.value_dict["top_bc"] == "periodic":
+        assert pmesh.Un[:, : ng] == pmesh.Un[:, -2 * ng : -ng, :]
+
+def test_bottom_bc_enforced():
+    """Check bottom of domain boundary condition enforcement
+
+    """
+
+    pin = PsychoInput(f"inputs/kh.in")
+
+    pin.parse_input_file()
+
+    ng = pin.value_dict["ng"]
+
+    pmesh = PsychoArray(pin, np.float64)
+
+
+    if pin.value_dict["bottom_bc"] == "transmissive":
+        assert pmesh.Un[:, :, : ng] == pmesh.Un[:, :, ng : 2 * ng]
+
+    elif pin.value_dict["bottom_bc"] == "periodic":
+        assert pmesh.Un[:, :, : ng] == pmesh.Un[:, :, -2 * ng : -ng]
 
 
 def test_psycho_reconstruct():
@@ -184,11 +262,11 @@ def test_psycho_1d_variables():
     rho, u, v, p = get_primitive_variables_1d(pmesh.Un, gamma)
 
     assert rho.ndim == (4)
-    assert rho[:] > 0.0
+    assert rho > 0.0
     assert u.ndim == (4)
     assert v.ndim == (4)
     assert p.ndim == (4)
-    assert p[:] > 0.0
+    assert p > 0.0
 
 
 def test_psycho_2d_variables():
@@ -281,7 +359,7 @@ def test_psycho_data_file_existence():
     pin = PsychoInput(f"inputs/kh.in")
     pin.parse_input_file()
 
-    pout = PsychoOutput(input_fname=input_fname)
+    pout = PsychoOutput(f"inputs/kh.in")
     pout.data_preferences(pin)
 
 
@@ -320,27 +398,6 @@ def test_psycho_data_file_existence():
 
             assert os.path.isfile('pressure.csv')
 
-    if "hdf5" in pout.file_type:
-
-        assert os.path.isfile(f'iter_{file_name}.hdf5')
-
-        f = h5py.File(f'iter_{file_name}.hdf5', 'r')
-
-        if "x-velocity" in pout.variables:
-
-            assert "xvelocity_dataset" in f.keys()
-
-        if "y-velocity" in pout.variables:
-
-            assert "yvelocity_dataset" in f.keys()
-
-        if "density" in pout.variables:
-
-            assert "density_dataset" in f.keys()
-
-        if "pressure" in pout.variables:
-
-            assert "pressure_dataset" in f.keys()
 
 
 def test_psycho_data_saved_to_file():
@@ -354,22 +411,11 @@ def test_psycho_data_saved_to_file():
 
     ProblemGenerator(pin=pin, pmesh=pmesh)
 
-    pout = PsychoOutput(input_fname=input_fname)
+    pout = PsychoOutput(f"inputs/kh.in")
     pout.data_preferences(pin)
 
-    gamma = pin.value_dict["gamma"]
-
-    rho, u, v, p = get_primitive_variables_2d(pmesh,gamma)
-
-    ng = pin.value_dict["ng"]
     nx1 = pin.value_dict["nx1"]
     nx2 = pin.value_dict["nx2"]
-    gamma = pin.value_dict["gamma"]
-
-    rho_ar = pmesh.Un[0, ng : -ng, ng : -ng]
-    u_ar = pmesh.Un[1, ng : -ng, ng : -ng] / rho_ar
-    v_ar = pmesh.Un[2, ng : -ng, ng : -ng] / rho_ar
-    et_ar = pmesh.Un[3, ng : -ng, ng : -ng] / rho_ar
 
 
     if "txt" in pout.file_type:
@@ -502,30 +548,30 @@ def test_plotter_init():
     )
 
 
-def test_plotter_figure():
+#def test_plotter_figure():
 
     # Initialize plotter with sample data and
     # verify it generates a figure
-    pin = PsychoInput(f"inputs/sample.in")
+#    pin = PsychoInput(f"inputs/sample.in")
 
-    pin.parse_input_file()
+#    pin.parse_input_file()
 
-    pmesh = PsychoArray(pin, np.float64)
+#    pmesh = PsychoArray(pin, np.float64)
 
-    sampleProblemGenerator(pin=pin, pmesh=pmesh)
+#    sampleProblemGenerator(pin=pin, pmesh=pmesh)
 
-    test_plotter = Plotter(pmesh)
+#    test_plotter = Plotter(pmesh)
 
-    test_plotter.create_plot(
-        ["rho"],
-        ["test"],
-        ["magma"],  # the coolest cmap by the way
-        stability_name="test",
-        style_mode=True,
-        iter=1,
-        time=0,
-    )
+#    test_plotter.create_plot(
+#        ["rho"],
+#        ["test"],
+#        ["magma"],  # the coolest cmap by the way
+#        stability_name="test",
+#        style_mode=True,
+#        iter=1,
+#        time=0,
+#    )
 
-    assert os.path.exists("./output/plots/0001.png")
+#    assert os.path.exists("./output/plots/0001.png")
 
-    os.remove("./output/plots/0001.png")
+#    os.remove("./output/plots/0001.png")

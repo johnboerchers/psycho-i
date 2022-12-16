@@ -7,7 +7,7 @@ name = "psycho-i"
 description = 'Finite volume solver to investigate flow instabilities'
 version = "1.0.1"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.9, <3.11"
 authors = [
   { name = "John Boerchers", email = "jb5027@princeton.edu" },
   { name = "Sydney Rzepka", email = "sr5286@princeton.edu" },
@@ -26,6 +26,7 @@ dependencies = [
 test = [
    "pytest>=7.0",
    "nox>=2022.8.7",
+   "numba"
 ]
 docs = [
     "furo",  # Theme

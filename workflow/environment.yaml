@@ -4,7 +4,10 @@ channels:
 dependencies:
   - "python>=3.9"
   - numpy
-  - matplotlib
+  - "matplotlib==3.4"
+  - freetype
+  - "pkg-config==0.29.2"
+  - "libpng==1.6.39"
   - mypy
   - pip
   - h5py
