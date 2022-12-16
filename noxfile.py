@@ -1,7 +1,7 @@
 import nox
 
 
-@nox.session
+@nox.session(python="3.10")
 def tests(session: nox.Session) -> None:
     """
     Run the unit and regular tests.
@@ -10,7 +10,7 @@ def tests(session: nox.Session) -> None:
     session.run("pytest")
 
 
-@nox.session
+@nox.session(python="3.10")
 def docs(session: nox.Session) -> None:
     """
     Build the docs. Pass "--serve" to serve.
@@ -21,7 +21,7 @@ def docs(session: nox.Session) -> None:
     session.run("sphinx-build", "-M", "html", ".", "_build")
 
 
-@nox.session
+@nox.session(python="3.10")
 def serve(session: nox.Session) -> None:
     docs(session)
     print("Launching docs at http://localhost:8000/ - use Ctrl-C to quit")
