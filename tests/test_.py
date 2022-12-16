@@ -6,7 +6,8 @@ sys.path.append("..")
 
 from src.input import PsychoInput
 from src.mesh import PsychoArray, get_interm_array
-#from src.pgen import ProblemGenerator
+from src.pgen.sample import sampleProblemGenerator
+from src.pgen.kh import ProblemGenerator
 from src.eos import p_EOS,e_EOS
 from src.reconstruct import get_limited_slopes
 from src.tools import get_primitive_variables_1d, get_primitive_variables_2d, get_fluxes_1d, get_fluxes_2d, calculate_timestep
@@ -40,7 +41,7 @@ def test_psycho_input():
     assert pin.value_dict["right_bc"] == "periodic"
     assert pin.value_dict["top_bc"] == "periodic"
     assert pin.value_dict["bottom_bc"] == "periodic"
-    assert pin.value_dict["output_frequency"] >= 1
+    assert float(pin.value_dict["output_frequency"]) >= 1
     assert pin.value_dict["nx1"] >= 64
     assert pin.value_dict["nx2"] >= 64
     assert pin.value_dict["nx1"] == pin.value_dict["nx2"]
@@ -59,6 +60,14 @@ def test_psycho_pgen():
     pmesh = PsychoArray(pin, np.float64)
 
     ProblemGenerator(pin=pin, pmesh=pmesh)
+    y = np.linspace(
+        pin.value_dict["x2min"],
+        pin.value_dict["x2max"],
+        pin.value_dict["nx2"] + 2 * pin.value_dict["ng"],
+    )
+
+    print(y)
+
     # check that values are correct
     assert pmesh.Un[0, :, :] == 1.0 # rho0
     assert pmesh.Un[0, :, np.abs(y) >= 0.25] == 2.0 # rho1

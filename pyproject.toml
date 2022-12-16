@@ -19,14 +19,16 @@ dependencies = [
   "mypy",
   "pip",
   "pre-commit>=2.20.0",
-  "myst-parser"
+  "myst-parser",
+  "numba",
+  "h5py"
 ]
 
 [project.optional-dependencies]
 test = [
    "pytest>=7.0",
    "nox>=2022.8.7",
-   "numba"
+   "numba",
 ]
 docs = [
     "furo",  # Theme
