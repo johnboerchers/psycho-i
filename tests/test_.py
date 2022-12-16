@@ -69,10 +69,10 @@ def test_psycho_pgen():
     print(y)
 
     # check that values are correct
-    assert pmesh.Un[0, :, :] == 1.0 # rho0
-    assert pmesh.Un[0, :, np.abs(y) >= 0.25] == 2.0 # rho1
-    assert pmesh.Un[1, :, :] ==  0.3 # rho0*u0
-    assert pmesh.Un[1, :, np.abs(y) >= 0.25] == -0.6 # rho1 * u1
+    assert np.all(np.isclose(pmesh.Un[0, :, np.abs(y) <= 0.25], 1.0)) # rho0
+    assert np.all(np.isclose(pmesh.Un[0, :, np.abs(y) >= 0.25], 2.0)) # rho1
+    assert np.all(np.isclose(pmesh.Un[1, :, np.abs(y) <= 0.25], 0.3)) # rho0 * u0
+    assert np.all(np.isclose(pmesh.Un[1, :, np.abs(y) >= 0.25], -0.6)) # rho1 * u1
 
 
     nx1 = pin.value_dict["nx1"]
@@ -135,7 +135,11 @@ def test_psycho_mesh():
 
     """
     pin = PsychoInput(f"inputs/kh.in")
+    pin.parse_input_file()
+
+
     pmesh = PsychoArray(pin, np.float64)
+
 
     assert pmesh.Un.ndim == (pmesh.nvar, pmesh.nx1 + 2 * pmesh.ng, pmesh.nx2 + 2 * pmesh.ng)
 
@@ -162,10 +166,10 @@ def test_left_bc_enforced():
 
 
     if pin.value_dict["left_bc"] == "transmissive":
-        assert pmesh.Un[:, : ng, :] == pmesh.Un[:, ng : 2 * ng, :]
+        assert np.array_equal(pmesh.Un[:, : ng, :], pmesh.Un[:, ng : 2 * ng, :])
 
     elif pin.value_dict["left_bc"] == "periodic":
-        assert pmesh.Un[:, : ng, :] == pmesh.Un[:, -2 * ng : -ng, :]
+        assert np.array_equal(pmesh.Un[:, : ng, :], pmesh.Un[:, -2 * ng : -ng, :])
 
 def test_right_bc_enforced():
     """Check right side of domain boundary condition enforcement
@@ -181,10 +185,10 @@ def test_right_bc_enforced():
     pmesh = PsychoArray(pin, np.float64)
 
     if pin.value_dict["right_bc"] == "transmissive":
-        assert pmesh.Un[:, -ng :, :] == pmesh.Un[:, -2 * ng : -ng, :]
+        assert np.array_equal(pmesh.Un[:, -ng :, :], pmesh.Un[:, -2 * ng : -ng, :])
 
     elif pin.value_dict["right_bc"] == "periodic":
-        assert pmesh.Un[:, -ng :, :] == pmesh.Un[:, ng : 2 * ng, :]
+        assert np.array_equal(pmesh.Un[:, -ng :, :], pmesh.Un[:, ng : 2 * ng, :])
 
 def test_top_bc_enforced():
     """Check top of domain boundary condition enforcement
@@ -200,10 +204,10 @@ def test_top_bc_enforced():
     pmesh = PsychoArray(pin, np.float64)
 
     if pin.value_dict["top_bc"] == "transmissive":
-        assert pmesh.Un[:, :, : ng] == pmesh.Un[:, :, ng : 2 * ng]
+        assert np.array_equal(pmesh.Un[:, :, : ng], pmesh.Un[:, :, ng : 2 * ng])
 
     elif pin.value_dict["top_bc"] == "periodic":
-        assert pmesh.Un[:, : ng] == pmesh.Un[:, -2 * ng : -ng, :]
+        assert np.array_equal(pmesh.Un[:, : ng], pmesh.Un[:, -2 * ng : -ng, :])
 
 def test_bottom_bc_enforced():
     """Check bottom of domain boundary condition enforcement
@@ -220,10 +224,10 @@ def test_bottom_bc_enforced():
 
 
     if pin.value_dict["bottom_bc"] == "transmissive":
-        assert pmesh.Un[:, :, : ng] == pmesh.Un[:, :, ng : 2 * ng]
+        assert np.array_equal(pmesh.Un[:, :, : ng], pmesh.Un[:, :, ng : 2 * ng])
 
     elif pin.value_dict["bottom_bc"] == "periodic":
-        assert pmesh.Un[:, :, : ng] == pmesh.Un[:, :, -2 * ng : -ng]
+        assert np.array_equal(pmesh.Un[:, :, : ng], pmesh.Un[:, :, -2 * ng : -ng])
 
 
 def test_psycho_reconstruct():
@@ -231,9 +235,8 @@ def test_psycho_reconstruct():
 
     """
     pin = PsychoInput(f"inputs/kh.in")
-    pmesh = PsychoArray(pin, np.float64)
-
     pin.parse_input_file()
+    pmesh = PsychoArray(pin, np.float64)
 
     nx1 = pin.value_dict["nx1"]
     nx2 = pin.value_dict["nx2"]
@@ -262,9 +265,9 @@ def test_psycho_1d_variables():
 
     """
     pin = PsychoInput(f"inputs/kh.in")
+    pin.parse_input_file()
     pmesh = PsychoArray(pin, np.float64)
 
-    pin.parse_input_file()
 
     gamma = pin.value_dict["gamma"]
 
@@ -283,9 +286,9 @@ def test_psycho_2d_variables():
 
     """
     pin = PsychoInput(f"inputs/kh.in")
+    pin.parse_input_file()
     pmesh = PsychoArray(pin, np.float64)
 
-    pin.parse_input_file()
 
     gamma = pin.value_dict["gamma"]
 
@@ -305,18 +308,21 @@ def test_psycho_1d_fluxes():
 
     """
     pin = PsychoInput(f"inputs/kh.in")
+    pin.parse_input_file()
     pmesh = PsychoArray(pin, np.float64)
 
-    pin.parse_input_file()
 
     gamma = pin.value_dict["gamma"]
 
+    nx = pin.value_dict["nx1"] + 2 * pin.value_dict["ng"]
+    ny = pin.value_dict["nx1"] + 2 * pin.value_dict["ng"]
+
     Fx = get_fluxes_1d(pmesh.Un, gamma, 'x')
-    assert Fx.ndim == (4)
+    assert Fx.size == (pmesh.nvar * nx * ny)
     assert Fx[1] >= 0.0
 
     Fy = get_fluxes_1d(pmesh.Un, gamma, 'y')
-    assert Fy.ndim == (4)
+    assert Fy.ndim == (3)
     assert Fy[2] >= 0.0
 
 
@@ -327,9 +333,9 @@ def test_psycho_2d_fluxes():
     """
 
     pin = PsychoInput(f"inputs/kh.in")
+    pin.parse_input_file()
     pmesh = PsychoArray(pin, np.float64)
 
-    pin.parse_input_file()
 
     gamma = pin.value_dict["gamma"]
 
@@ -348,14 +354,15 @@ def test_calculate_timestep():
 
     """
     pin = PsychoInput(f"inputs/kh.in")
-    pmesh = PsychoArray(pin, np.float64)
-
     pin.parse_input_file()
+    pmesh = PsychoArray(pin, np.float64)
 
     cfl = float(pin.value_dict["CFL"])
     gamma = float(pin.value_dict["gamma"])
 
-    assert calculate_timestep(pmesh, cfl, gamma) > 0.0
+    tstep = calculate_timestep(pmesh, cfl, gamma)
+
+    assert tstep > 0.0
 
 
 
